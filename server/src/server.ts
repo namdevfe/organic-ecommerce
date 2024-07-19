@@ -1,13 +1,17 @@
-import express, { Request, Response } from 'express'
 import 'dotenv/config'
+import express, { Application } from 'express'
+import connectDB from '~/config/mongodb'
+import initRoutes from '~/routes'
 
-const app = express()
+const app: Application = express()
 const APP_HOST = process.env.APP_HOST || 'localhost'
 const APP_PORT = Number(process.env.APP_PORT) || 5000
 
-app.get('/test', (req: Request, res: Response) => {
-  res.send('Hello Namdev')
-})
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+connectDB()
+initRoutes(app)
 
 app.listen(APP_PORT, APP_HOST, () => {
   // eslint-disable-next-line no-console
