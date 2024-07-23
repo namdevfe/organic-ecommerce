@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express, { Application } from 'express'
 import connectDB from '~/config/mongodb'
-import initRoutes from '~/routes'
+import initRoutes from '~/routes/v1'
 
 const app: Application = express()
 const APP_HOST = process.env.APP_HOST || 'localhost'
