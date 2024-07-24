@@ -24,3 +24,7 @@ export interface IJWTPayload {
   iat: Date
   exp: Date
 }
+
+export interface IRefreshTokenBody {
+  refreshToken: string
+}
