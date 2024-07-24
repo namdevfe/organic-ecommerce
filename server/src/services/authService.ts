@@ -50,7 +50,7 @@ const login = async (data: ILoginBody) => {
     const refreshToken: string = generateToken({ uid: isExistUser._id }, env.JWT_SECRET_KEY, REFRESH_TOKEN_EXPIRES_TIME)
 
     // Save refreshToken to db & cookies on server
-    await User.findByIdAndUpdate({ _id: isExistUser._id }, { refreshToken })
+    await User.findByIdAndUpdate({ _id: isExistUser._id }, { refreshToken }, { new: true })
 
     // Return data for client
     return {
@@ -66,9 +66,24 @@ const login = async (data: ILoginBody) => {
   }
 }
 
+const getProfile = async (uid: string) => {
+  try {
+    const userData = await User.findById({ _id: uid }).select('-password -refreshToken -role')
+    if (!userData) throw new ApiError(StatusCodes.NOT_FOUND, 'User profile not found.')
+    return {
+      statusCode: StatusCodes.OK,
+      message: 'Get profile is successfully.',
+      data: userData
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
-  login
+  login,
+  getProfile
 }
 
 export default authService

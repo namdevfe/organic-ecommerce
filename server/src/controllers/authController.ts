@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import authService from '~/services/authService'
+import { AuthRequestCustom, IJWTPayload } from '~/types/auth'
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -19,9 +20,20 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getProfile = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const user = req.user as IJWTPayload
+  try {
+    const userData = await authService.getProfile(user.uid)
+    return res.json(userData)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
-  login
+  login,
+  getProfile
 }
 
 export default authController
