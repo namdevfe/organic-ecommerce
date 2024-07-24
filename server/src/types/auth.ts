@@ -28,3 +28,5 @@ export interface IJWTPayload {
 export interface IRefreshTokenBody {
   refreshToken: string
 }
+
+export interface ILogoutBody extends IRefreshTokenBody {}

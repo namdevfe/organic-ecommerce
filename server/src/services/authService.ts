@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-catch */
 import { StatusCodes } from 'http-status-codes'
+import jwt from 'jsonwebtoken'
 import env from '~/config/environments'
 import { ACCESS_TOKEN_EXPIRES_TIME, REFRESH_TOKEN_EXPIRES_TIME } from '~/constants/jwt'
 import { generateToken } from '~/middlewares/jwtMiddleware'
 import User from '~/models/userModel'
-import { ILoginBody, IRegisterBody } from '~/types/auth'
+import { ILoginBody, ILogoutBody, IRegisterBody } from '~/types/auth'
 import ApiError from '~/utils/ApiError'
-import jwt from 'jsonwebtoken'
 
 const register = async (data: IRegisterBody) => {
   try {
@@ -112,9 +112,25 @@ const refreshToken = async (token: string) => {
   }
 }
 
+const logout = async (data: ILogoutBody) => {
+  const { refreshToken } = data
+  try {
+    // Find user & delete refresh token in db
+    const user = await User.findOneAndUpdate({ refreshToken }, { refreshToken: '' }, { new: true })
+    if (!user) throw new ApiError(StatusCodes.BAD_REQUEST, 'Refresh token invalid.')
+    return {
+      statusCode: StatusCodes.OK,
+      message: 'Logout is successfully.'
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
+  logout,
   getProfile,
   refreshToken
 }

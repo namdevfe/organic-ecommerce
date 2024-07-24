@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import authService from '~/services/authService'
-import { AuthRequestCustom, IJWTPayload, IRefreshTokenBody } from '~/types/auth'
+import { AuthRequestCustom, IJWTPayload, ILogoutBody, IRefreshTokenBody } from '~/types/auth'
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -40,9 +40,19 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await authService.logout(req.body as ILogoutBody)
+    return res.json(data)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
+  logout,
   getProfile,
   refreshToken
 }
