@@ -6,6 +6,7 @@ import { generateToken } from '~/middlewares/jwtMiddleware'
 import User from '~/models/userModel'
 import { ILoginBody, IRegisterBody } from '~/types/auth'
 import ApiError from '~/utils/ApiError'
+import jwt from 'jsonwebtoken'
 
 const register = async (data: IRegisterBody) => {
   try {
@@ -80,10 +81,42 @@ const getProfile = async (uid: string) => {
   }
 }
 
+const refreshToken = async (token: string) => {
+  try {
+    // Compare refresh token in db
+    const user = await User.findOne({ refreshToken: token })
+
+    // Refresh token wrong
+    if (!user) throw new ApiError(StatusCodes.BAD_REQUEST, 'Refresh token invalid.')
+
+    const decode = await jwt.verify(token, env.JWT_SECRET_KEY)
+
+    if (decode) {
+      const newAccessToken: string = generateToken(
+        { uid: user._id, role: user.role },
+        env.JWT_SECRET_KEY,
+        ACCESS_TOKEN_EXPIRES_TIME
+      )
+
+      return {
+        statusCode: StatusCodes.OK,
+        message: 'Create new access token is successfully.',
+        data: {
+          accessToken: newAccessToken,
+          refreshToken: token
+        }
+      }
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
-  getProfile
+  getProfile,
+  refreshToken
 }
 
 export default authService

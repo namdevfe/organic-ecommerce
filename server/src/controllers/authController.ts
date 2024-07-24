@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import authService from '~/services/authService'
-import { AuthRequestCustom, IJWTPayload } from '~/types/auth'
+import { AuthRequestCustom, IJWTPayload, IRefreshTokenBody } from '~/types/auth'
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -30,10 +30,21 @@ const getProfile = async (req: AuthRequestCustom, res: Response, next: NextFunct
   }
 }
 
+const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+  const { refreshToken } = req.body as IRefreshTokenBody
+  try {
+    const data = await authService.refreshToken(refreshToken)
+    return res.json(data)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
-  getProfile
+  getProfile,
+  refreshToken
 }
 
 export default authController
