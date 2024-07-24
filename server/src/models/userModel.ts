@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { InferSchemaType } from 'mongoose'
 import bcrypt from 'bcrypt'
 
 // Declare the Schema of the Mongo model
@@ -75,7 +75,18 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt)
 })
 
+userSchema.methods = {
+  isCorrectPassword: async function (password: string) {
+    return await bcrypt.compare(password, this.password)
+  }
+}
+
 //Export the model
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model<IUser>('User', userSchema)
+
+interface IUser extends InferSchemaType<typeof userSchema> {
+  // eslint-disable-next-line no-unused-vars
+  isCorrectPassword(password: string): Promise<boolean>
+}
 
 export default User
