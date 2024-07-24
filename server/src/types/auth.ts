@@ -6,3 +6,8 @@ export interface IRegisterBody {
   username: string
   phone: string
 }
+
+export interface ILoginBody {
+  email: string
+  password: string
+}
