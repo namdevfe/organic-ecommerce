@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
 import authService from '~/services/authService'
-import { AuthRequestCustom, IJWTPayload, ILogoutBody, IRefreshTokenBody } from '~/types/auth'
+import { AuthRequestCustom, IForgotPasswordBody, IJWTPayload, ILogoutBody, IRefreshTokenBody } from '~/types/auth'
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -49,12 +50,32 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+// Client send email field -> server check already user is exist
+// Server: If email valid generate reset password token -> send email
+// Client: click link to send token -> Server: check token has valid
+// Server: token valid create new password
+const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { email } = req.body as IForgotPasswordBody
+  try {
+    const response = await authService.forgotPassword(email)
+
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'OK',
+      data: response
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
   logout,
   getProfile,
-  refreshToken
+  refreshToken,
+  forgotPassword
 }
 
 export default authController
