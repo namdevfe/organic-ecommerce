@@ -34,3 +34,8 @@ export interface ILogoutBody extends IRefreshTokenBody {}
 export interface IForgotPasswordBody {
   email: string
 }
+
+export interface IResetPasswordBody {
+  password: string
+  resetPasswordToken: string
+}
