@@ -2,11 +2,14 @@
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import env from '~/config/environments'
+import { BASE_URL_API_V1 } from '~/constants/baseUrl'
 import { ACCESS_TOKEN_EXPIRES_TIME, REFRESH_TOKEN_EXPIRES_TIME } from '~/constants/jwt'
+import { RESET_PASSWORD_TOKEN_EXPIRES_TIME } from '~/constants/token'
 import { generateToken } from '~/middlewares/jwtMiddleware'
 import User from '~/models/userModel'
 import { ILoginBody, ILogoutBody, IRegisterBody } from '~/types/auth'
 import ApiError from '~/utils/ApiError'
+import sendMail from '~/utils/sendMail'
 
 const register = async (data: IRegisterBody) => {
   try {
@@ -127,12 +130,36 @@ const logout = async (data: ILogoutBody) => {
   }
 }
 
+const forgotPassword = async (email: string) => {
+  try {
+    const user = await User.findOne({ email })
+    if (!user) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found.')
+
+    // Generate reset password token
+    const resetPasswordToken = user.generateResetPasswordToken()
+
+    // Save to database
+    user.passwordResetToken = resetPasswordToken
+    user.passwordResetExpires = Date.now() * RESET_PASSWORD_TOKEN_EXPIRES_TIME
+    await user.save()
+
+    // Send email
+    const html = `<p>Please click on this link to reset your password. This link will expire in 15 minutes</p> <br /> <a href="http://${env.APP_HOST}:${env.APP_PORT}${BASE_URL_API_V1}/auth/reset-password/${resetPasswordToken}">Click Here</a>`
+    const info = await sendMail(email, html)
+
+    return info
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
   logout,
   getProfile,
-  refreshToken
+  refreshToken,
+  forgotPassword
 }
 
 export default authService

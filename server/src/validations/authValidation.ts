@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { NextFunction, Request, Response } from 'express'
-import { ILoginBody, ILogoutBody, IRefreshTokenBody, IRegisterBody } from '~/types/auth'
+import { IForgotPasswordBody, ILoginBody, ILogoutBody, IRefreshTokenBody, IRegisterBody } from '~/types/auth'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
 
@@ -78,11 +78,31 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<IForgotPasswordBody>({
+    email: Joi.string()
+      .required()
+      .email({ minDomainSegments: 1, tlds: { allow: ['com'] } })
+      .trim()
+      .strict()
+  })
+
+  try {
+    await correctCondition.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message))
+    }
+  }
+}
+
 const authValidation = {
   register,
   login,
   logout,
-  refreshToken
+  refreshToken,
+  forgotPassword
 }
 
 export default authValidation

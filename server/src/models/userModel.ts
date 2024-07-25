@@ -1,5 +1,6 @@
 import mongoose, { InferSchemaType } from 'mongoose'
 import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
@@ -78,6 +79,12 @@ userSchema.pre('save', async function (next) {
 userSchema.methods = {
   isCorrectPassword: async function (password: string) {
     return await bcrypt.compare(password, this.password)
+  },
+  generateResetPasswordToken: function () {
+    const resetPasswordToken = crypto.randomBytes(32).toString('hex')
+    // Hash reset password token
+    this.passwordResetToken = crypto.createHash('SHA256').update(resetPasswordToken).digest('hex')
+    return resetPasswordToken
   }
 }
 
@@ -87,6 +94,7 @@ const User = mongoose.model<IUser>('User', userSchema)
 interface IUser extends InferSchemaType<typeof userSchema> {
   // eslint-disable-next-line no-unused-vars
   isCorrectPassword(password: string): Promise<boolean>
+  generateResetPasswordToken(): string
 }
 
 export default User

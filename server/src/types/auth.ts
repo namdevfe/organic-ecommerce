@@ -30,3 +30,7 @@ export interface IRefreshTokenBody {
 }
 
 export interface ILogoutBody extends IRefreshTokenBody {}
+
+export interface IForgotPasswordBody {
+  email: string
+}
