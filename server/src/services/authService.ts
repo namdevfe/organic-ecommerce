@@ -7,7 +7,7 @@ import { ACCESS_TOKEN_EXPIRES_TIME, REFRESH_TOKEN_EXPIRES_TIME } from '~/constan
 import { RESET_PASSWORD_TOKEN_EXPIRES_TIME } from '~/constants/token'
 import { generateToken } from '~/middlewares/jwtMiddleware'
 import User from '~/models/userModel'
-import { ILoginBody, ILogoutBody, IRegisterBody } from '~/types/auth'
+import { ILoginBody, ILogoutBody, IRegisterBody, IResetPasswordBody } from '~/types/auth'
 import ApiError from '~/utils/ApiError'
 import sendMail from '~/utils/sendMail'
 
@@ -140,7 +140,7 @@ const forgotPassword = async (email: string) => {
 
     // Save to database
     user.passwordResetToken = resetPasswordToken
-    user.passwordResetExpires = Date.now() * RESET_PASSWORD_TOKEN_EXPIRES_TIME
+    user.passwordResetExpires = Date.now() + RESET_PASSWORD_TOKEN_EXPIRES_TIME
     await user.save()
 
     // Send email
@@ -153,13 +153,35 @@ const forgotPassword = async (email: string) => {
   }
 }
 
+const resetPassword = async ({ password, resetPasswordToken }: IResetPasswordBody) => {
+  try {
+    // Compare with token in db
+    const user = await User.findOne({
+      passwordResetToken: resetPasswordToken,
+      passwordResetExpires: { $gt: Date.now() }
+    })
+    if (!user) throw new ApiError(StatusCodes.BAD_REQUEST, 'Reset password token invalid.')
+    user.password = password
+    user.passwordResetExpires = undefined
+    user.passwordResetToken = undefined
+    await user.save()
+    return {
+      statusCode: StatusCodes.OK,
+      message: 'Reset password is successfully.'
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
   logout,
   getProfile,
   refreshToken,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 }
 
 export default authService

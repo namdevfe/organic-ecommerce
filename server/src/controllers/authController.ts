@@ -69,13 +69,23 @@ const forgotPassword = async (req: Request, res: Response, next: NextFunction) =
   }
 }
 
+const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const response = await authService.resetPassword(req.body)
+    return res.json(response)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
   logout,
   getProfile,
   refreshToken,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 }
 
 export default authController
