@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
+import { ADMIN_URL_ENDPOINT } from '~/constants/baseUrl'
 import authController from '~/controllers/authController'
 import { verifyToken } from '~/middlewares/jwtMiddleware'
+import { isAdmin } from '~/middlewares/permissionMiddleware'
 import authValidation from '~/validations/authValidation'
 
 const router: Router = express.Router()
@@ -13,5 +15,8 @@ router.put('/forgot-password', authValidation.forgotPassword, authController.for
 router.put('/reset-password', authValidation.resetPassword, authController.resetPassword)
 router.get('/profile', verifyToken, authController.getProfile)
 router.put('/profile', [verifyToken, authValidation.updateProfile], authController.updateProfile)
+
+// ADMIN ROUTES
+router.get(`${ADMIN_URL_ENDPOINT}/users`, [verifyToken, isAdmin], authController.getListUsersByAdmin)
 
 export default router
