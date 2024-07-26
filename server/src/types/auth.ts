@@ -39,3 +39,10 @@ export interface IResetPasswordBody {
   password: string
   resetPasswordToken: string
 }
+
+export interface IUpdateProfile {
+  firstName?: string
+  lastName?: string
+  address?: string
+  avatar?: string
+}

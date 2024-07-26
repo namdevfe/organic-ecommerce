@@ -78,6 +78,16 @@ const resetPassword = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
+const updateProfile = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const { uid } = req.user as IJWTPayload
+  try {
+    const userUpdated = await authService.updateProfile(uid, req.body)
+    return res.json({ userUpdated })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
@@ -85,7 +95,8 @@ const authController = {
   getProfile,
   refreshToken,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  updateProfile
 }
 
 export default authController
