@@ -50,10 +50,6 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-// Client send email field -> server check already user is exist
-// Server: If email valid generate reset password token -> send email
-// Client: click link to send token -> Server: check token has valid
-// Server: token valid create new password
 const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body as IForgotPasswordBody
   try {
@@ -88,6 +84,20 @@ const updateProfile = async (req: AuthRequestCustom, res: Response, next: NextFu
   }
 }
 
+// ADMIN
+const getListUsersByAdmin = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  try {
+    const users = await authService.getListUsersByAdmin()
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Get list user is successfully.',
+      data: users
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
@@ -96,7 +106,8 @@ const authController = {
   refreshToken,
   forgotPassword,
   resetPassword,
-  updateProfile
+  updateProfile,
+  getListUsersByAdmin
 }
 
 export default authController

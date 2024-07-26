@@ -187,6 +187,16 @@ const updateProfile = async (uid: string, data: any) => {
   }
 }
 
+// FEATURES: Admin
+const getListUsersByAdmin = async () => {
+  try {
+    const users = await User.find().select('-password -role -refreshToken')
+    return users
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
@@ -195,7 +205,8 @@ const authService = {
   forgotPassword,
   resetPassword,
   getProfile,
-  updateProfile
+  updateProfile,
+  getListUsersByAdmin
 }
 
 export default authService
