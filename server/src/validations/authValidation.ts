@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { NextFunction, Request, Response } from 'express'
 import {
+  IDeleteUserByAdmin,
   IForgotPasswordBody,
   ILoginBody,
   ILogoutBody,
@@ -159,6 +160,21 @@ const updateUserByAdmin = async (req: Request, res: Response, next: NextFunction
   }
 }
 
+const deleteUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<IDeleteUserByAdmin>({
+    uid: Joi.string().required().trim().strict()
+  })
+
+  try {
+    await correctCondition.validateAsync(req.params, { abortEarly: false })
+    next()
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      next(new ApiError(StatusCodes.BAD_REQUEST, error.message))
+    }
+  }
+}
+
 const authValidation = {
   register,
   login,
@@ -167,7 +183,8 @@ const authValidation = {
   forgotPassword,
   resetPassword,
   updateProfile,
-  updateUserByAdmin
+  updateUserByAdmin,
+  deleteUserByAdmin
 }
 
 export default authValidation

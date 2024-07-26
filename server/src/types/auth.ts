@@ -48,3 +48,7 @@ export interface IUpdateProfile {
 }
 
 export interface IUpdateUserByAdmin extends IUpdateProfile {}
+
+export interface IDeleteUserByAdmin {
+  uid: string
+}
