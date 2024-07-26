@@ -112,6 +112,19 @@ const updateUserByAdmin = async (req: Request, res: Response, next: NextFunction
   }
 }
 
+const deleteUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const { uid } = req.params
+  try {
+    const userDeleted = await authService.deleteUserByAdmin(uid)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: `Delete user with email ${userDeleted?.email} is successfully`
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
@@ -122,7 +135,8 @@ const authController = {
   resetPassword,
   updateProfile,
   getListUsersByAdmin,
-  updateUserByAdmin
+  updateUserByAdmin,
+  deleteUserByAdmin
 }
 
 export default authController

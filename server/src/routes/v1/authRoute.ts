@@ -23,5 +23,10 @@ router.put(
   [verifyToken, isAdmin, authValidation.updateUserByAdmin],
   authController.updateUserByAdmin
 )
+router.delete(
+  `${ADMIN_URL_ENDPOINT}/users/:uid`,
+  [verifyToken, isAdmin, authValidation.deleteUserByAdmin],
+  authController.deleteUserByAdmin
+)
 
 export default router

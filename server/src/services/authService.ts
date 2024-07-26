@@ -210,6 +210,15 @@ const updateUserByAdmin = async (uid: string, data: any) => {
   }
 }
 
+const deleteUserByAdmin = async (uid: string) => {
+  try {
+    const userDeleted = await User.findByIdAndDelete({ _id: uid }, { new: true })
+    return userDeleted
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
@@ -220,7 +229,8 @@ const authService = {
   getProfile,
   updateProfile,
   getListUsersByAdmin,
-  updateUserByAdmin
+  updateUserByAdmin,
+  deleteUserByAdmin
 }
 
 export default authService
