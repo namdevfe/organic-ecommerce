@@ -70,20 +70,6 @@ const login = async (data: ILoginBody) => {
   }
 }
 
-const getProfile = async (uid: string) => {
-  try {
-    const userData = await User.findById({ _id: uid }).select('-password -refreshToken -role')
-    if (!userData) throw new ApiError(StatusCodes.NOT_FOUND, 'User profile not found.')
-    return {
-      statusCode: StatusCodes.OK,
-      message: 'Get profile is successfully.',
-      data: userData
-    }
-  } catch (error) {
-    throw error
-  }
-}
-
 const refreshToken = async (token: string) => {
   try {
     // Compare refresh token in db
@@ -177,14 +163,39 @@ const resetPassword = async ({ password, resetPasswordToken }: IResetPasswordBod
   }
 }
 
+const getProfile = async (uid: string) => {
+  try {
+    const userData = await User.findById({ _id: uid }).select('-password -refreshToken -role')
+    if (!userData) throw new ApiError(StatusCodes.NOT_FOUND, 'User profile not found.')
+    return {
+      statusCode: StatusCodes.OK,
+      message: 'Get profile is successfully.',
+      data: userData
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const updateProfile = async (uid: string, data: any) => {
+  try {
+    const userUpdated = await User.findByIdAndUpdate({ _id: uid }, { ...data }, { new: true })
+    return userUpdated
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
   logout,
-  getProfile,
   refreshToken,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getProfile,
+  updateProfile
 }
 
 export default authService
