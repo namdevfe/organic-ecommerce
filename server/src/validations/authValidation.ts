@@ -7,7 +7,8 @@ import {
   IRefreshTokenBody,
   IRegisterBody,
   IResetPasswordBody,
-  IUpdateProfile
+  IUpdateProfile,
+  IUpdateUserByAdmin
 } from '~/types/auth'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
@@ -139,6 +140,25 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
+// ADMIN
+const updateUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<IUpdateUserByAdmin>({
+    firstName: Joi.string().trim().strict(),
+    lastName: Joi.string().trim().strict(),
+    address: Joi.string().trim().strict(),
+    avatar: Joi.string().trim().strict()
+  })
+
+  try {
+    await correctCondition.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message))
+    }
+  }
+}
+
 const authValidation = {
   register,
   login,
@@ -146,7 +166,8 @@ const authValidation = {
   refreshToken,
   forgotPassword,
   resetPassword,
-  updateProfile
+  updateProfile,
+  updateUserByAdmin
 }
 
 export default authValidation

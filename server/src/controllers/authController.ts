@@ -98,6 +98,20 @@ const getListUsersByAdmin = async (req: AuthRequestCustom, res: Response, next: 
   }
 }
 
+const updateUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const { uid } = req.params
+  try {
+    const userUpdated = await authService.updateUserByAdmin(uid, req.body)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'User updated is successfully.',
+      data: userUpdated
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
   login,
@@ -107,7 +121,8 @@ const authController = {
   forgotPassword,
   resetPassword,
   updateProfile,
-  getListUsersByAdmin
+  getListUsersByAdmin,
+  updateUserByAdmin
 }
 
 export default authController

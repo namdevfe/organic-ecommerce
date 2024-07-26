@@ -18,5 +18,10 @@ router.put('/profile', [verifyToken, authValidation.updateProfile], authControll
 
 // ADMIN ROUTES
 router.get(`${ADMIN_URL_ENDPOINT}/users`, [verifyToken, isAdmin], authController.getListUsersByAdmin)
+router.put(
+  `${ADMIN_URL_ENDPOINT}/users/:uid`,
+  [verifyToken, isAdmin, authValidation.updateUserByAdmin],
+  authController.updateUserByAdmin
+)
 
 export default router
