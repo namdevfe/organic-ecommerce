@@ -160,11 +160,14 @@ const resetPassword = async ({ password, resetPasswordToken }: IResetPasswordBod
       passwordResetToken: resetPasswordToken,
       passwordResetExpires: { $gt: Date.now() }
     })
+
     if (!user) throw new ApiError(StatusCodes.BAD_REQUEST, 'Reset password token invalid.')
     user.password = password
     user.passwordResetExpires = undefined
     user.passwordResetToken = undefined
+    user.passwordChangedAt = Date.now()
     await user.save()
+
     return {
       statusCode: StatusCodes.OK,
       message: 'Reset password is successfully.'
