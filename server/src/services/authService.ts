@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-useless-catch */
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
@@ -177,7 +178,6 @@ const getProfile = async (uid: string) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updateProfile = async (uid: string, data: any) => {
   try {
     const userUpdated = await User.findByIdAndUpdate({ _id: uid }, { ...data }, { new: true })
@@ -197,6 +197,19 @@ const getListUsersByAdmin = async () => {
   }
 }
 
+const updateUserByAdmin = async (uid: string, data: any) => {
+  try {
+    if (!uid) throw new ApiError(StatusCodes.BAD_REQUEST, 'User id is required.')
+    if (Object.keys(data).length === 0) throw new ApiError(StatusCodes.BAD_REQUEST, 'Must have user data')
+    const userUpdated = await User.findByIdAndUpdate({ _id: uid }, { ...data }, { new: true }).select(
+      '-password -role -refreshToken'
+    )
+    return userUpdated
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
   login,
@@ -206,7 +219,8 @@ const authService = {
   resetPassword,
   getProfile,
   updateProfile,
-  getListUsersByAdmin
+  getListUsersByAdmin,
+  updateUserByAdmin
 }
 
 export default authService

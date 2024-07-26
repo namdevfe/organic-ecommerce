@@ -46,3 +46,5 @@ export interface IUpdateProfile {
   address?: string
   avatar?: string
 }
+
+export interface IUpdateUserByAdmin extends IUpdateProfile {}
