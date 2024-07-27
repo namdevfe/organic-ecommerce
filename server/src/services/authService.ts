@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-useless-catch */
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
