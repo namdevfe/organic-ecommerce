@@ -24,8 +24,30 @@ const createProductByAdmin = async (req: Request, res: Response, next: NextFunct
   }
 }
 
+const updateProductByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<ProductBodyTypes>({
+    title: Joi.string().trim().strict(),
+    description: Joi.string().trim().strict(),
+    brand: Joi.string().trim().strict(),
+    price: Joi.number(),
+    quantity: Joi.number()
+  })
+
+  try {
+    if (Object.keys(req.body).length === 0)
+      throw new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, 'Must have product data update.')
+    await correctCondition.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch (error) {
+    if (error instanceof Error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message))
+    }
+  }
+}
+
 const productValidation = {
-  createProductByAdmin
+  createProductByAdmin,
+  updateProductByAdmin
 }
 
 export default productValidation

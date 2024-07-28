@@ -16,8 +16,23 @@ const createProductByAdmin = async (req: Request, res: Response, next: NextFunct
   }
 }
 
+const updateProductByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const { productId } = req.params
+  try {
+    const updatedProduct = await productService.updateProductByAdmin(productId, req.body)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: `Product with id = ${updatedProduct?._id} updated is successfully.`,
+      data: updatedProduct
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const productController = {
-  createProductByAdmin
+  createProductByAdmin,
+  updateProductByAdmin
 }
 
 export default productController

@@ -8,5 +8,10 @@ const router: Router = express.Router()
 
 // ADMIN ROUTES
 router.post('/', [verifyToken, isAdmin, productValidation.createProductByAdmin], productController.createProductByAdmin)
+router.put(
+  '/:productId',
+  [verifyToken, isAdmin, productValidation.updateProductByAdmin],
+  productController.updateProductByAdmin
+)
 
 export default router
