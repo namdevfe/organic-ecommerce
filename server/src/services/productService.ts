@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { StatusCodes } from 'http-status-codes'
 import Product from '~/models/productModel'
 import { ProductBodyTypes } from '~/types/product'
@@ -5,7 +6,6 @@ import ApiError from '~/utils/ApiError'
 import slugify from '~/utils/slugify'
 
 const createProductByAdmin = async (data: ProductBodyTypes) => {
-  // eslint-disable-next-line no-useless-catch
   try {
     const productAlreadyExist = await Product.findOne({ title: data.title })
 
@@ -22,8 +22,19 @@ const createProductByAdmin = async (data: ProductBodyTypes) => {
   }
 }
 
+const updateProductByAdmin = async (productId: string, updateData: ProductBodyTypes) => {
+  try {
+    const slug = slugify(updateData.title)
+    const updatedProduct = await Product.findByIdAndUpdate(productId, { ...updateData, slug }, { new: true })
+    return updatedProduct
+  } catch (error) {
+    throw error
+  }
+}
+
 const productService = {
-  createProductByAdmin
+  createProductByAdmin,
+  updateProductByAdmin
 }
 
 export default productService
