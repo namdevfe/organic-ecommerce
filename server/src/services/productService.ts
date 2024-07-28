@@ -32,9 +32,19 @@ const updateProductByAdmin = async (productId: string, updateData: ProductBodyTy
   }
 }
 
+const deleteProductByAdmin = async (productId: string) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(productId, { new: true })
+    return deletedProduct
+  } catch (error) {
+    throw error
+  }
+}
+
 const productService = {
   createProductByAdmin,
-  updateProductByAdmin
+  updateProductByAdmin,
+  deleteProductByAdmin
 }
 
 export default productService
