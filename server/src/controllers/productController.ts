@@ -43,10 +43,25 @@ const deleteProductByAdmin = async (req: Request, res: Response, next: NextFunct
   }
 }
 
+const getProductDetail = async (req: Request, res: Response, next: NextFunction) => {
+  const { productId } = req.params
+  try {
+    const productDetail = await productService.getProductDetail(productId)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Get product detail is successfully.',
+      data: productDetail
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const productController = {
   createProductByAdmin,
   updateProductByAdmin,
-  deleteProductByAdmin
+  deleteProductByAdmin,
+  getProductDetail
 }
 
 export default productController
