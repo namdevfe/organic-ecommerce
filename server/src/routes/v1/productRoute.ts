@@ -7,6 +7,7 @@ import productValidation from '~/validations/productValidation'
 const router: Router = express.Router()
 
 // ADMIN ROUTES
+router.get('/:productId', productController.getProductDetail)
 router.post('/', [verifyToken, isAdmin, productValidation.createProductByAdmin], productController.createProductByAdmin)
 router.put(
   '/:productId',

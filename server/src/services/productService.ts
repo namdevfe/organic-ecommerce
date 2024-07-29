@@ -41,10 +41,20 @@ const deleteProductByAdmin = async (productId: string) => {
   }
 }
 
+const getProductDetail = async (productId: string) => {
+  try {
+    const productDetail = await Product.findById(productId)
+    return productDetail
+  } catch (error) {
+    throw error
+  }
+}
+
 const productService = {
   createProductByAdmin,
   updateProductByAdmin,
-  deleteProductByAdmin
+  deleteProductByAdmin,
+  getProductDetail
 }
 
 export default productService
