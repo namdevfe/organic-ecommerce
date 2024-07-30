@@ -57,11 +57,25 @@ const getProductDetail = async (req: Request, res: Response, next: NextFunction)
   }
 }
 
+const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const products = await productService.getProducts(req.query)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Get list products is successfully.',
+      data: products
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const productController = {
   createProductByAdmin,
   updateProductByAdmin,
   deleteProductByAdmin,
-  getProductDetail
+  getProductDetail,
+  getProducts
 }
 
 export default productController
