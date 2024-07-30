@@ -21,3 +21,11 @@ export interface IProduct {
 }
 
 export type ProductBodyTypes = Omit<IProduct, 'category' | 'sold' | 'images' | 'ratings' | 'totalRatings'>
+
+// export interface IProductQueryParams {
+//   title?: string
+//   page?: string
+//   limit?: string
+//   sort?: string
+//   fields?: string
+// }
