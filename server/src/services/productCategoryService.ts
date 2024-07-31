@@ -36,9 +36,19 @@ const updateProductCategoryByAdmin = async (productCategoryId: string, data: IPr
   }
 }
 
+const deleteProductCategoryByAdmin = async (productCategoryId: string) => {
+  try {
+    const deletedProductCategory = await ProductCategory.findByIdAndDelete(productCategoryId, { new: true })
+    return deletedProductCategory
+  } catch (error) {
+    throw error
+  }
+}
+
 const productCategoryService = {
   createProductCategoryByAdmin,
-  updateProductCategoryByAdmin
+  updateProductCategoryByAdmin,
+  deleteProductCategoryByAdmin
 }
 
 export default productCategoryService

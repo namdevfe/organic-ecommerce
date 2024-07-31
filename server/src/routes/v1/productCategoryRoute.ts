@@ -17,5 +17,6 @@ router.put(
   [verifyToken, isAdmin, productCategoryValidation.updateProductCategoryByAdmin],
   productCategoryController.updateProductCategoryByAdmin
 )
+router.delete('/:productCategoryId', [verifyToken, isAdmin], productCategoryController.deleteProductCategoryByAdmin)
 
 export default router
