@@ -22,8 +22,23 @@ const createProductCategoryByAdmin = async (data: IProductCategory) => {
   }
 }
 
+const updateProductCategoryByAdmin = async (productCategoryId: string, data: IProductCategory) => {
+  try {
+    const slug = slugify(data.title)
+    const updatedProductCategory = await ProductCategory.findByIdAndUpdate(
+      productCategoryId,
+      { ...data, slug },
+      { new: true }
+    )
+    return updatedProductCategory
+  } catch (error) {
+    throw error
+  }
+}
+
 const productCategoryService = {
-  createProductCategoryByAdmin
+  createProductCategoryByAdmin,
+  updateProductCategoryByAdmin
 }
 
 export default productCategoryService

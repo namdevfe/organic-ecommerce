@@ -12,5 +12,10 @@ router.post(
   [verifyToken, isAdmin, productCategoryValidation.createProductCategoryByAdmin],
   productCategoryController.createProductCategoryByAdmin
 )
+router.put(
+  '/:productCategoryId',
+  [verifyToken, isAdmin, productCategoryValidation.updateProductCategoryByAdmin],
+  productCategoryController.updateProductCategoryByAdmin
+)
 
 export default router
