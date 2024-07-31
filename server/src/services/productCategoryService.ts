@@ -55,11 +55,64 @@ const getProductCategoryBySlug = async (slug: string) => {
   }
 }
 
+const getProductCategories = async (query?: any) => {
+  try {
+    const queries = { ...query }
+    const exludeFields = ['page', 'limit', 'sort', 'fields']
+    exludeFields.forEach((field) => {
+      delete queries[field]
+    })
+
+    // Format queries object
+    let queryString = JSON.stringify(queries)
+    queryString = queryString.replace(/\b(gt|gte|lt|lte)\b/g, (matchEl) => `$${matchEl}`)
+    const formattedQueries = JSON.parse(queryString)
+
+    // Filtering
+    if (queries?.title) {
+      formattedQueries.title = { $regex: queries.title, $options: 'i' }
+    }
+
+    // BUILD QUERY COMMAND
+    let queryCommand = ProductCategory.find(formattedQueries)
+
+    // Sorting
+    if (query?.sort) {
+      const sortBy = query.sort.split(',').join(' ')
+      queryCommand = queryCommand.sort(sortBy)
+    }
+
+    // Fields limiting
+    if (query?.fields) {
+      const fields = query.fields.split(',').join(' ')
+      queryCommand = queryCommand.select(fields)
+    }
+
+    // Pagination
+    const page = query.page ? Number(query.page) : 1
+    const limit = query.limit ? Number(query.limit) : 1
+    const skip = (page - 1) * limit
+    queryCommand = queryCommand.limit(limit).skip(skip)
+
+    // EXEC QUERY COMMAND
+    const productCategories = await queryCommand.exec()
+    const count = productCategories.length
+
+    return {
+      count,
+      productCategories
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const productCategoryService = {
   createProductCategoryByAdmin,
   updateProductCategoryByAdmin,
   deleteProductCategoryByAdmin,
-  getProductCategoryBySlug
+  getProductCategoryBySlug,
+  getProductCategories
 }
 
 export default productCategoryService

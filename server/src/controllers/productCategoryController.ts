@@ -59,11 +59,25 @@ const getProductCategoryBySlug = async (req: Request, res: Response, next: NextF
   }
 }
 
+const getProductCategories = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const productCategories = await productCategoryService.getProductCategories(req.query)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Get list product categories is successfully.',
+      data: productCategories
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const productCategoryController = {
   createProductCategoryByAdmin,
   updateProductCategoryByAdmin,
   deleteProductCategoryByAdmin,
-  getProductCategoryBySlug
+  getProductCategoryBySlug,
+  getProductCategories
 }
 
 export default productCategoryController

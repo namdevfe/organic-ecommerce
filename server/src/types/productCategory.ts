@@ -5,3 +5,11 @@ export interface IProductCategory {
 }
 
 export type ProductCategoryBodyTypes = Omit<IProductCategory, 'slug'>
+
+// export interface IProductCategoryParams {
+//   title?: string
+//   page?: number
+//   limit?: number
+//   sort?: any
+//   fields?: string
+// }

@@ -6,6 +6,7 @@ import productCategoryValidation from '~/validations/productCategoryValidation'
 
 const router: Router = express.Router()
 
+router.get('/', productCategoryController.getProductCategories)
 router.get('/:slug', productCategoryController.getProductCategoryBySlug)
 
 // ADMIN ROUTES
