@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import productService from '~/services/productService'
+import { AuthRequestCustom, IJWTPayload } from '~/types/auth'
 
 // ADMIN
 const createProductByAdmin = async (req: Request, res: Response, next: NextFunction) => {
@@ -70,12 +71,28 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const ratingProduct = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const { productId } = req.params
+  const { uid } = req.user as IJWTPayload
+  try {
+    const ratingProduct = await productService.ratingProduct({ productId, uid, ...req.body })
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Rated product is successfully.',
+      data: ratingProduct
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const productController = {
   createProductByAdmin,
   updateProductByAdmin,
   deleteProductByAdmin,
   getProductDetail,
-  getProducts
+  getProducts,
+  ratingProduct
 }
 
 export default productController

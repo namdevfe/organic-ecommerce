@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import Joi from 'joi'
-import { ProductBodyTypes } from '~/types/product'
+import { ProductBodyTypes, RatingProductBodyTypes } from '~/types/product'
 import ApiError from '~/utils/ApiError'
 
 const createProductByAdmin = async (req: Request, res: Response, next: NextFunction) => {
@@ -45,9 +45,25 @@ const updateProductByAdmin = async (req: Request, res: Response, next: NextFunct
   }
 }
 
+const ratingProduct = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<RatingProductBodyTypes>({
+    star: Joi.number().required().min(1).max(5),
+    comment: Joi.string().trim().strict()
+  })
+  try {
+    await correctCondition.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch (error) {
+    if (error instanceof Error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message))
+    }
+  }
+}
+
 const productValidation = {
   createProductByAdmin,
-  updateProductByAdmin
+  updateProductByAdmin,
+  ratingProduct
 }
 
 export default productValidation

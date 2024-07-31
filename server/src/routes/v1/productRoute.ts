@@ -17,5 +17,6 @@ router.put(
   productController.updateProductByAdmin
 )
 router.delete('/:productId', [verifyToken, isAdmin], productController.deleteProductByAdmin)
+router.put('/rating/:productId', [verifyToken, productValidation.ratingProduct], productController.ratingProduct)
 
 export default router
