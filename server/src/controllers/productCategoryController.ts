@@ -15,8 +15,26 @@ const createProductCategoryByAdmin = async (req: Request, res: Response, next: N
   }
 }
 
+const updateProductCategoryByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const { productCategoryId } = req.params
+  try {
+    const updatedProductCategory = await productCategoryService.updateProductCategoryByAdmin(
+      productCategoryId,
+      req.body
+    )
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Product category updated is successfully.',
+      data: updatedProductCategory
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const productCategoryController = {
-  createProductCategoryByAdmin
+  createProductCategoryByAdmin,
+  updateProductCategoryByAdmin
 }
 
 export default productCategoryController
