@@ -45,10 +45,21 @@ const deleteProductCategoryByAdmin = async (productCategoryId: string) => {
   }
 }
 
+const getProductCategoryBySlug = async (slug: string) => {
+  try {
+    const productCategory = await ProductCategory.findOne({ slug })
+    if (!productCategory) throw new ApiError(StatusCodes.NOT_FOUND, 'Product category not found.')
+    return productCategory
+  } catch (error) {
+    throw error
+  }
+}
+
 const productCategoryService = {
   createProductCategoryByAdmin,
   updateProductCategoryByAdmin,
-  deleteProductCategoryByAdmin
+  deleteProductCategoryByAdmin,
+  getProductCategoryBySlug
 }
 
 export default productCategoryService
