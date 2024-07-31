@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { StatusCodes } from 'http-status-codes'
 import Product from '~/models/productModel'
-import { ProductBodyTypes } from '~/types/product'
+import { IRatingProduct, ProductBodyTypes } from '~/types/product'
 import ApiError from '~/utils/ApiError'
 import slugify from '~/utils/slugify'
 
@@ -102,12 +102,58 @@ const getProducts = async (query?: any) => {
   }
 }
 
+const ratingProduct = async (ratingData: IRatingProduct) => {
+  const { productId, uid, star, comment } = ratingData || {}
+  try {
+    // Find product
+    const product = await Product.findById(productId)
+    const alreadyRating = product?.ratings.find((item) => item.postedBy?.toString() === uid)
+
+    // Check rating of product found
+    if (alreadyRating) {
+      // If alreadyRating will update rating
+      await Product.updateOne(
+        { ratings: { $elemMatch: alreadyRating } },
+        { $set: { 'ratings.$.star': star, 'ratings.$.comment': comment } },
+        { new: true }
+      )
+    } else {
+      // If not yet rated will create new rating
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          $push: {
+            ratings: {
+              star,
+              comment,
+              postedBy: uid
+            }
+          }
+        },
+        { new: true }
+      )
+    }
+
+    const updatedRatingProduct = await Product.findById(productId)
+    const totalStar = updatedRatingProduct?.ratings.reduce((total, ratingItem) => total + ratingItem.star, 0)
+    const ratingCount = updatedRatingProduct?.ratings.length
+    const totalRatings = Math.round((Number(totalStar) * 10) / Number(ratingCount)) / 10
+
+    // Update total ratings field in db
+    const res = await Product.findByIdAndUpdate(productId, { totalRatings }, { new: true })
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
 const productService = {
   createProductByAdmin,
   updateProductByAdmin,
   deleteProductByAdmin,
   getProductDetail,
-  getProducts
+  getProducts,
+  ratingProduct
 }
 
 export default productService
