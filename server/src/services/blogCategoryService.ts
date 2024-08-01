@@ -86,8 +86,19 @@ const getBlogCategories = async (query?: any) => {
   }
 }
 
+const updateBlogCategoryByAdmin = async (blogCategoryId: string, data: IBlogCategory) => {
+  try {
+    const slug = slugify(data.title)
+    const updatedBlogCategory = await BlogCategory.findByIdAndUpdate(blogCategoryId, { ...data, slug }, { new: true })
+    return updatedBlogCategory
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogCategoryService = {
   createBlogCategoryByAdmin,
+  updateBlogCategoryByAdmin,
   getBlogCategoryBySlug,
   getBlogCategories
 }
