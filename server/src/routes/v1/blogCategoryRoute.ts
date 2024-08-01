@@ -7,6 +7,8 @@ import blogCategoryValidation from '~/validations/blogCategoryValidation'
 const router: Router = express.Router()
 
 router.get('/:slug', blogCategoryController.getBlogCategoryBySlug)
+router.get('/', blogCategoryController.getBlogCategories)
+
 router.post(
   '/',
   [verifyToken, isAdmin, blogCategoryValidation.createBlogCategoryByAdmin],
