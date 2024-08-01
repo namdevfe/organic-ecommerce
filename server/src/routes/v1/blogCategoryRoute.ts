@@ -19,5 +19,6 @@ router.put(
   [verifyToken, isAdmin, blogCategoryValidation.updateBlogCategoryByAdmin],
   blogCategoryController.updateBlogCategory
 )
+router.delete('/:blogCategoryId', [verifyToken, isAdmin], blogCategoryController.deleteBlogCategory)
 
 export default router

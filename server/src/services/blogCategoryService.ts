@@ -96,11 +96,23 @@ const updateBlogCategoryByAdmin = async (blogCategoryId: string, data: IBlogCate
   }
 }
 
+const deleteBlogCategoryByAdmin = async (blogCategoryId: string) => {
+  try {
+    const deletedBlogCategory = await BlogCategory.findByIdAndDelete(blogCategoryId, { new: true })
+    if (!deletedBlogCategory)
+      throw new ApiError(StatusCodes.NOT_FOUND, `Not found blog category with id = ${blogCategoryId}.`)
+    return deletedBlogCategory
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogCategoryService = {
   createBlogCategoryByAdmin,
   updateBlogCategoryByAdmin,
   getBlogCategoryBySlug,
-  getBlogCategories
+  getBlogCategories,
+  deleteBlogCategoryByAdmin
 }
 
 export default blogCategoryService
