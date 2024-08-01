@@ -56,11 +56,26 @@ const updateBlogCategory = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
+const deleteBlogCategory = async (req: Request, res: Response, next: NextFunction) => {
+  const { blogCategoryId } = req.params
+  try {
+    const deleteBlogCategory = await blogCategoryService.deleteBlogCategoryByAdmin(blogCategoryId)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Deleted blog categories is successfully.',
+      data: deleteBlogCategory
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const blogCategoryController = {
   createBlogCategoryByAdmin,
   updateBlogCategory,
   getBlogCategoryBySlug,
-  getBlogCategories
+  getBlogCategories,
+  deleteBlogCategory
 }
 
 export default blogCategoryController
