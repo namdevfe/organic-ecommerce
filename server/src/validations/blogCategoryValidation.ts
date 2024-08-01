@@ -18,8 +18,24 @@ const createBlogCategoryByAdmin = async (req: Request, res: Response, next: Next
   }
 }
 
+const updateBlogCategoryByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<IBlogCategory>({
+    title: Joi.string().trim().strict(),
+    description: Joi.string().trim().strict()
+  })
+
+  try {
+    if (!Object.keys(req.body).length) throw new Error('Must have data to update.')
+    await correctCondition.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch (error) {
+    if (error instanceof Error) next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message))
+  }
+}
+
 const blogCategoryValidation = {
-  createBlogCategoryByAdmin
+  createBlogCategoryByAdmin,
+  updateBlogCategoryByAdmin
 }
 
 export default blogCategoryValidation

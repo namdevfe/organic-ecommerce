@@ -34,8 +34,22 @@ const getBlogCategories = async (req: Request, res: Response, next: NextFunction
     const blogCategories = await blogCategoryService.getBlogCategories(req.query)
     return res.json({
       statusCode: StatusCodes.OK,
-      message: 'Get list product categories is successfully.',
+      message: 'Get list blog categories is successfully.',
       data: blogCategories
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const updateBlogCategory = async (req: Request, res: Response, next: NextFunction) => {
+  const { blogCategoryId } = req.params
+  try {
+    const updateBlogCategory = await blogCategoryService.updateBlogCategoryByAdmin(blogCategoryId, req.body)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Updated blog categories is successfully.',
+      data: updateBlogCategory
     })
   } catch (error) {
     next(error)
@@ -44,6 +58,7 @@ const getBlogCategories = async (req: Request, res: Response, next: NextFunction
 
 const blogCategoryController = {
   createBlogCategoryByAdmin,
+  updateBlogCategory,
   getBlogCategoryBySlug,
   getBlogCategories
 }

@@ -14,5 +14,10 @@ router.post(
   [verifyToken, isAdmin, blogCategoryValidation.createBlogCategoryByAdmin],
   blogCategoryController.createBlogCategoryByAdmin
 )
+router.put(
+  '/:blogCategoryId',
+  [verifyToken, isAdmin, blogCategoryValidation.updateBlogCategoryByAdmin],
+  blogCategoryController.updateBlogCategory
+)
 
 export default router
