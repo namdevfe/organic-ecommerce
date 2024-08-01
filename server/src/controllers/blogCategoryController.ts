@@ -15,8 +15,23 @@ const createBlogCategoryByAdmin = async (req: Request, res: Response, next: Next
   }
 }
 
+const getBlogCategoryBySlug = async (req: Request, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  try {
+    const blogCategoryDetails = await blogCategoryService.getBlogCategoryBySlug(slug)
+    return res.json({
+      statusCode: StatusCodes.OK,
+      message: 'Get blog category details is successfully.',
+      data: blogCategoryDetails
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const blogCategoryController = {
-  createBlogCategoryByAdmin
+  createBlogCategoryByAdmin,
+  getBlogCategoryBySlug
 }
 
 export default blogCategoryController
