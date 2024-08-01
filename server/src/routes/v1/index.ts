@@ -4,11 +4,13 @@ import errorHandlerMiddleware, { notFoundErrorMiddleware } from '~/middlewares/e
 import authRoutes from '~/routes/v1/authRoute'
 import productRoutes from '~/routes/v1/productRoute'
 import productCategoryRoutes from '~/routes/v1/productCategoryRoute'
+import blogCategoryRoutes from '~/routes/v1/blogCategoryRoute'
 
 const initRoutes = (app: Application) => {
   app.use(`${BASE_URL_API_V1}/auth`, authRoutes)
   app.use(`${BASE_URL_API_V1}/products`, productRoutes)
   app.use(`${BASE_URL_API_V1}/product-categories`, productCategoryRoutes)
+  app.use(`${BASE_URL_API_V1}/blog-categories`, blogCategoryRoutes)
 
   app.use(notFoundErrorMiddleware)
   app.use(errorHandlerMiddleware)

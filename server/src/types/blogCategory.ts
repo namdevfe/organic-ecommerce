@@ -3,3 +3,5 @@ export interface IBlogCategory {
   slug: string
   description: string
 }
+
+export type BlogCategoryBodyTypes = IBlogCategory
