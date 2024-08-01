@@ -3,7 +3,7 @@ import { IProductCategory } from '~/types/productCategory'
 
 type ProductCategoryModel = Model<IProductCategory>
 
-const productSchema = new mongoose.Schema<IProductCategory, ProductCategoryModel>(
+const productCategorySchema = new mongoose.Schema<IProductCategory, ProductCategoryModel>(
   {
     title: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema<IProductCategory, ProductCategoryModel
 
 const ProductCategory: ProductCategoryModel = model<IProductCategory, ProductCategoryModel>(
   'ProductCategory',
-  productSchema
+  productCategorySchema
 )
 
 export default ProductCategory
