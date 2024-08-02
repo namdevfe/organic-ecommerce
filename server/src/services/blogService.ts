@@ -43,7 +43,6 @@ const getBlogBySlug = async (slug: string) => {
   }
 }
 
-// ?title=test
 const getBlogs = async (query?: any) => {
   try {
     // BUILD QUERY
@@ -95,10 +94,28 @@ const getBlogs = async (query?: any) => {
   }
 }
 
+const updateBlog = async (slug: string, updateData: IBlog) => {
+  try {
+    const alreadyBlog = await Blog.findOne({ slug })
+    if (!alreadyBlog) throw new ApiError(StatusCodes.NOT_FOUND, `Blog with slug = ${slug} not found.`)
+    const newSlug = updateData.title ? slugify(updateData.title) : undefined
+    const updatedBlog = await Blog.findOneAndUpdate({ slug }, { ...updateData, slug: newSlug }, { new: true })
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: `Updated blog with slug = ${slug} is successfully.`,
+      data: updatedBlog
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogService = {
   createBlog,
   getBlogBySlug,
-  getBlogs
+  getBlogs,
+  updateBlog
 }
 
 export default blogService
