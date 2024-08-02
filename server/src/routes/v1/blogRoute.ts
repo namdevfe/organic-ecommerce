@@ -10,5 +10,6 @@ router.get('/:slug', blogController.getBlogBySlug)
 router.get('/', blogController.getBlogs)
 router.post('/', [verifyToken, isAdmin, blogValidation.createBlog], blogController.createBlog)
 router.put('/:slug', [verifyToken, isAdmin, blogValidation.updateBlog], blogController.updateBlog)
+router.delete('/:slug', [verifyToken, isAdmin], blogController.deleteBlog)
 
 export default router

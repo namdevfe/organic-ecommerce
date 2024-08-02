@@ -39,11 +39,22 @@ const updateBlog = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  try {
+    const deletedBlog = await blogService.deleteBlog(slug)
+    return res.json(deletedBlog)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const blogController = {
   createBlog,
   getBlogBySlug,
   getBlogs,
-  updateBlog
+  updateBlog,
+  deleteBlog
 }
 
 export default blogController
