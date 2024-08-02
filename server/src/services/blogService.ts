@@ -43,9 +43,62 @@ const getBlogBySlug = async (slug: string) => {
   }
 }
 
+// ?title=test
+const getBlogs = async (query?: any) => {
+  try {
+    // BUILD QUERY
+    const queryObj = { ...query }
+    // Remove exclude field from query object
+    const excludeFields = ['page', 'limit', 'sort', 'fields']
+    excludeFields.forEach((fieldKey: string) => delete queryObj[fieldKey])
+
+    // Format query object correct with operators in mongodb
+    let queryString = JSON.stringify(queryObj)
+    queryString = queryString.replace(/\b(gt|gte|lt|lte)\b/g, (matchEl) => `$${matchEl}`)
+    const formattedQueryObj = JSON.parse(queryString)
+
+    // Filtering
+    if (queryObj?.title) {
+      formattedQueryObj.title = { $regex: queryObj.title, $options: 'i' }
+    }
+
+    let queryCommand = Blog.find(formattedQueryObj)
+
+    // Sorting
+    if (query?.sort) {
+      const sortBy = query.sort.split(',').join(' ')
+      queryCommand = queryCommand.sort(sortBy)
+    }
+
+    // Fields Limiting
+    if (query?.fields) {
+      const fields = query.fields.split(',').join(' ')
+      queryCommand = queryCommand.select(fields)
+    }
+
+    // Pagination
+    const page = Number(query.page) || 1
+    const limit = Number(query.limit) || 1
+    const skip = (page - 1) * limit
+    queryCommand = queryCommand.limit(limit).skip(skip)
+
+    // EXECUTE QUERY COMMAND
+    const count = await Blog.find(formattedQueryObj).countDocuments()
+    const blogs = await queryCommand.exec()
+
+    return {
+      count,
+      blogs
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogService = {
   createBlog,
-  getBlogBySlug
+  getBlogBySlug,
+  getBlogs
 }
 
 export default blogService
