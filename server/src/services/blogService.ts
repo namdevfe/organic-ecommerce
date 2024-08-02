@@ -111,11 +111,27 @@ const updateBlog = async (slug: string, updateData: IBlog) => {
   }
 }
 
+const deleteBlog = async (slug: string) => {
+  try {
+    const deletedBlog = await Blog.findOneAndDelete({ slug }, { new: true })
+    if (!deletedBlog) throw new ApiError(StatusCodes.NOT_FOUND, `Blog with slug = ${slug} not found.`)
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: `Deleted blog with slug = ${slug} is successfully.`,
+      data: deletedBlog
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogService = {
   createBlog,
   getBlogBySlug,
   getBlogs,
-  updateBlog
+  updateBlog,
+  deleteBlog
 }
 
 export default blogService
