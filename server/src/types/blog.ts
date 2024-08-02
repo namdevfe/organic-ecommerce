@@ -3,6 +3,7 @@ export interface IBlog {
   slug?: string
   description: string
   views?: number
+  blogCategory: any
   coverImage?: string
   likes?: any[]
   dislikes?: any[]

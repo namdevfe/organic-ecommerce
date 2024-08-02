@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema<IProduct, ProductModel>(
     slug: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     brand: { type: String, required: true },
-    category: { type: mongoose.Types.ObjectId, ref: 'Category' },
+    category: { type: mongoose.Types.ObjectId, ref: 'ProductCategory' },
     images: [String],
     price: { type: Number, required: true },
     quantity: { type: Number, default: 0 },

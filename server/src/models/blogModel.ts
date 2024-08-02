@@ -4,9 +4,9 @@ import { IBlog } from '~/types/blog'
 
 type BlogModel = Model<IBlog>
 
-export const BLOG_MODEL_NAME = 'Blog'
+export const BLOG_COLLECTION_NAME = 'Blog'
 
-const blogSchema = new mongoose.Schema<IBlog, BlogModel>({
+const blogSchema = new mongoose.Schema<IBlog>({
   title: {
     type: String,
     required: true,
@@ -21,6 +21,7 @@ const blogSchema = new mongoose.Schema<IBlog, BlogModel>({
     type: String,
     required: true
   },
+  blogCategory: { type: mongoose.Types.ObjectId, ref: 'BlogCategory' },
   views: {
     type: Number,
     default: 0
@@ -37,6 +38,6 @@ const blogSchema = new mongoose.Schema<IBlog, BlogModel>({
   }
 })
 
-const Blog: BlogModel = model<IBlog, BlogModel>(BLOG_MODEL_NAME, blogSchema)
+const Blog: BlogModel = model<IBlog, BlogModel>(BLOG_COLLECTION_NAME, blogSchema)
 
 export default Blog
