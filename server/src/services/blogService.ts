@@ -27,8 +27,25 @@ const createBlog = async (data: IBlog) => {
   }
 }
 
+const getBlogBySlug = async (slug: string) => {
+  try {
+    const blogDetails = await Blog.findOne({ slug }).populate('blogCategory')
+    if (!blogDetails) throw new ApiError(StatusCodes.NOT_FOUND, `Blog with slug = ${slug} not found.`)
+
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get blog detail is successfully.',
+      data: blogDetails
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogService = {
-  createBlog
+  createBlog,
+  getBlogBySlug
 }
 
 export default blogService
