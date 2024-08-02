@@ -10,8 +10,19 @@ const createBlog = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getBlogBySlug = async (req: Request, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  try {
+    const blogDetails = await blogService.getBlogBySlug(slug)
+    return res.json(blogDetails)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const blogController = {
-  createBlog
+  createBlog,
+  getBlogBySlug
 }
 
 export default blogController

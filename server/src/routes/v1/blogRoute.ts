@@ -6,6 +6,9 @@ import blogValidation from '~/validations/blogValidation'
 
 const router: Router = express.Router()
 
+// Get Blog Details
+router.get('/:slug', blogController.getBlogBySlug)
+
 // Create Blog
 router.post('/', [verifyToken, isAdmin, blogValidation.createBlog], blogController.createBlog)
 
