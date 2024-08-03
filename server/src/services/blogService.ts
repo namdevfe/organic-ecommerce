@@ -135,13 +135,7 @@ const likeBlog = async (slug: string, uid: string) => {
 
     // Case: Disliked
     if (isDisliked) {
-      const updatedBlog = await Blog.findOneAndUpdate({ slug }, { $pull: { dislikes: uid } }, { new: true })
-      const response: IResponseReturn = {
-        statusCode: StatusCodes.OK,
-        message: 'Deleted dislike blog is successfully.',
-        data: updatedBlog
-      }
-      return response
+      await Blog.findOneAndUpdate({ slug }, { $pull: { dislikes: uid } }, { new: true })
     }
 
     // Case: Liked
@@ -169,13 +163,51 @@ const likeBlog = async (slug: string, uid: string) => {
   }
 }
 
+const dislikeBlog = async (slug: string, uid: string) => {
+  try {
+    const blog = await Blog.findOne({ slug })
+    if (!blog) throw new ApiError(StatusCodes.NOT_FOUND, 'Not found.')
+
+    const isLiked = blog.likes?.some((userId: string) => userId.toString() === uid)
+
+    // Case: Liked
+    if (isLiked) {
+      await Blog.findOneAndUpdate({ slug }, { $pull: { likes: uid } }, { new: true })
+    }
+
+    // Case: Liked
+    const isDisliked = blog.dislikes?.some((userId: string) => userId.toString() === uid)
+    if (isDisliked) {
+      const updatedBlog = await Blog.findOneAndUpdate({ slug }, { $pull: { dislikes: uid } }, { new: true })
+      const response: IResponseReturn = {
+        statusCode: StatusCodes.OK,
+        message: 'Deleted disliked blog is successfully.',
+        data: updatedBlog
+      }
+      return response
+    } else {
+      const dislikedBlog = await Blog.findOneAndUpdate({ slug }, { $push: { dislikes: uid } }, { new: true })
+
+      const response: IResponseReturn = {
+        statusCode: StatusCodes.OK,
+        message: `Disliked blog with userId = ${uid} is successfully.`,
+        data: dislikedBlog
+      }
+      return response
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogService = {
   createBlog,
   getBlogBySlug,
   getBlogs,
   updateBlog,
   deleteBlog,
-  likeBlog
+  likeBlog,
+  dislikeBlog
 }
 
 export default blogService
