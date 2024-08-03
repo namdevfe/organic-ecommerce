@@ -126,12 +126,56 @@ const deleteBlog = async (slug: string) => {
   }
 }
 
+const likeBlog = async (slug: string, uid: string) => {
+  try {
+    const blog = await Blog.findOne({ slug })
+    if (!blog) throw new ApiError(StatusCodes.NOT_FOUND, 'Not found.')
+
+    const isDisliked = blog.dislikes?.some((userId) => userId?.toString() === uid)
+
+    // Case: Disliked
+    if (isDisliked) {
+      const updatedBlog = await Blog.findOneAndUpdate({ slug }, { $pull: { dislikes: uid } }, { new: true })
+      const response: IResponseReturn = {
+        statusCode: StatusCodes.OK,
+        message: 'Deleted dislike blog is successfully.',
+        data: updatedBlog
+      }
+      return response
+    }
+
+    // Case: Liked
+    const isLiked = blog.likes?.some((userId) => userId?.toString() === uid)
+    if (isLiked) {
+      const updatedBlog = await Blog.findOneAndUpdate({ slug }, { $pull: { likes: uid } }, { new: true })
+      const response: IResponseReturn = {
+        statusCode: StatusCodes.OK,
+        message: 'Deleted like blog is successfully.',
+        data: updatedBlog
+      }
+      return response
+    } else {
+      const likedBlog = await Blog.findOneAndUpdate({ slug }, { $push: { likes: uid } }, { new: true })
+
+      const response: IResponseReturn = {
+        statusCode: StatusCodes.OK,
+        message: `Liked blog with userId = ${uid} is successfully.`,
+        data: likedBlog
+      }
+      return response
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const blogService = {
   createBlog,
   getBlogBySlug,
   getBlogs,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  likeBlog
 }
 
 export default blogService
