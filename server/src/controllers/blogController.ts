@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import blogService from '~/services/blogService'
+import { AuthRequestCustom, IJWTPayload } from '~/types/auth'
 
 const createBlog = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -49,12 +50,24 @@ const deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const likeBlog = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  const { uid } = req.user as IJWTPayload
+  try {
+    const likedBlog = await blogService.likeBlog(slug, uid)
+    return res.json(likedBlog)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const blogController = {
   createBlog,
   getBlogBySlug,
   getBlogs,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  likeBlog
 }
 
 export default blogController
