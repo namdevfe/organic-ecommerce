@@ -12,5 +12,6 @@ router.post('/', [verifyToken, isAdmin, blogValidation.createBlog], blogControll
 router.put('/:slug', [verifyToken, isAdmin, blogValidation.updateBlog], blogController.updateBlog)
 router.delete('/:slug', [verifyToken, isAdmin], blogController.deleteBlog)
 router.put('/:slug/like', verifyToken, blogController.likeBlog)
+router.put('/:slug/dislike', verifyToken, blogController.dislikeBlog)
 
 export default router

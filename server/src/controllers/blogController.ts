@@ -61,13 +61,25 @@ const likeBlog = async (req: AuthRequestCustom, res: Response, next: NextFunctio
   }
 }
 
+const dislikeBlog = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  const { uid } = req.user as IJWTPayload
+  try {
+    const dislikedBlog = await blogService.dislikeBlog(slug, uid)
+    return res.json(dislikedBlog)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const blogController = {
   createBlog,
   getBlogBySlug,
   getBlogs,
   updateBlog,
   deleteBlog,
-  likeBlog
+  likeBlog,
+  dislikeBlog
 }
 
 export default blogController
