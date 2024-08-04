@@ -7,9 +7,13 @@ import { v2 as cloudinary } from 'cloudinary'
 
 const createBrand = async (req: Request, res: Response, next: NextFunction) => {
   const correctCondition = Joi.object<IBrand>({
-    title: Joi.string().required().trim().strict(),
+    title: Joi.string().required().trim().strict().messages({
+      'any.required': 'Title is required',
+      'string.empty': 'Title is not allowd to be empty'
+    }),
     image: Joi.string().required().trim().strict().messages({
-      'string.empty': 'Image is required.'
+      'any.required': 'Image is required',
+      'string.empty': 'Image is not allowed to be empty'
     })
   })
   const imageFileData = req.file
