@@ -6,6 +6,7 @@ import productRoutes from '~/routes/v1/productRoute'
 import productCategoryRoutes from '~/routes/v1/productCategoryRoute'
 import blogCategoryRoutes from '~/routes/v1/blogCategoryRoute'
 import blogRoutes from '~/routes/v1/blogRoute'
+import brandRoutes from '~/routes/v1/brandRoute'
 
 const initRoutes = (app: Application) => {
   app.use(`${BASE_URL_API_V1}/auth`, authRoutes)
@@ -13,6 +14,7 @@ const initRoutes = (app: Application) => {
   app.use(`${BASE_URL_API_V1}/product-categories`, productCategoryRoutes)
   app.use(`${BASE_URL_API_V1}/blog-categories`, blogCategoryRoutes)
   app.use(`${BASE_URL_API_V1}/blogs`, blogRoutes)
+  app.use(`${BASE_URL_API_V1}/brands`, brandRoutes)
 
   app.use(notFoundErrorMiddleware)
   app.use(errorHandlerMiddleware)
