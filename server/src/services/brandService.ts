@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { StatusCodes } from 'http-status-codes'
 import Brand from '~/models/brandModel'
 import { IBrand } from '~/types/brand'
@@ -33,8 +34,25 @@ const createBrand = async (data: IBrand, imageFileData: ICloudinaryFile) => {
   }
 }
 
+const getBrandBySlug = async (slug: string) => {
+  try {
+    const brandDetails = await Brand.findOne({ slug })
+    if (!brandDetails) throw new ApiError(StatusCodes.NOT_FOUND, 'Not found.')
+
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get brand detail is successfully.',
+      data: brandDetails
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const brandService = {
-  createBrand
+  createBrand,
+  getBrandBySlug
 }
 
 export default brandService

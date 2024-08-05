@@ -7,6 +7,7 @@ import brandValidation from '~/validations/brandValidation'
 
 const router: Router = express.Router()
 
+router.get('/:slug', brandController.getBrandBySlug)
 router.post(
   '/',
   [verifyToken, isAdmin, upload.single('image'), brandValidation.createBrand],

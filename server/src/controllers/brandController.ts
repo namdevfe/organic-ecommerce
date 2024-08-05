@@ -13,8 +13,19 @@ const creatBrand = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getBrandBySlug = async (req: Request, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  try {
+    const brandDetails = await brandService.getBrandBySlug(slug)
+    return res.json(brandDetails)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const brandController = {
-  creatBrand
+  creatBrand,
+  getBrandBySlug
 }
 
 export default brandController
