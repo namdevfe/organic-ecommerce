@@ -7,6 +7,7 @@ import brandValidation from '~/validations/brandValidation'
 
 const router: Router = express.Router()
 
+router.get('/', brandController.getBrands)
 router.get('/:slug', brandController.getBrandBySlug)
 router.post(
   '/',

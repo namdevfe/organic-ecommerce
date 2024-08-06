@@ -50,9 +50,71 @@ const getBrandBySlug = async (slug: string) => {
   }
 }
 
+const getBrands = async (query?: any) => {
+  try {
+    const queryObj = { ...query }
+    const excludeFields = ['page', 'limit', 'sort', 'fields']
+    excludeFields.forEach((field) => delete queryObj[field])
+
+    // Format query
+    let queryString = JSON.stringify(queryObj)
+    queryString = queryString.replace(/\b(gt|gte|lt|lte)\b/g, (matchEl) => `$${matchEl}`)
+    const formattedQueryObj = JSON.parse(queryString)
+
+    // Filtering
+    if (queryObj?.title) {
+      formattedQueryObj.title = { $regex: queryObj.title, $options: 'i' }
+    }
+
+    // Build query command
+    let queryCommand = Brand.find(formattedQueryObj)
+
+    // Sorting
+    if (query?.sort) {
+      const sortBy = query.sort?.split(',').join(' ')
+      queryCommand = queryCommand.sort(sortBy)
+    }
+
+    // Limiting fields
+    if (query?.fields) {
+      const fields = query.fields?.split(',').join(' ')
+      queryCommand = queryCommand.select(fields)
+    }
+
+    // Pagination
+    const page = +query?.page || 1
+    const limit = +query?.limit || 1
+    const skip = (page - 1) * limit
+    queryCommand = queryCommand.limit(limit).skip(skip)
+
+    // Execute query
+    const count = await Brand.find(formattedQueryObj).countDocuments()
+    const brands = await queryCommand.exec()
+
+    // Return data
+    const totalPage = Math.ceil(count / limit)
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get brands is successfully',
+      data: {
+        count,
+        brands,
+        pagination: {
+          currentPage: page,
+          totalPage
+        }
+      }
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const brandService = {
   createBrand,
-  getBrandBySlug
+  getBrandBySlug,
+  getBrands
 }
 
 export default brandService
