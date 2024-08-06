@@ -14,5 +14,10 @@ router.post(
   [verifyToken, isAdmin, upload.single('image'), brandValidation.createBrand],
   brandController.creatBrand
 )
+router.put(
+  '/:slug',
+  [verifyToken, isAdmin, upload.single('image'), brandValidation.updateBrand],
+  brandController.updateBrand
+)
 
 export default router
