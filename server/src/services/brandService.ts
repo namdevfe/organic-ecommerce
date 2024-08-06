@@ -140,11 +140,27 @@ const updateBrand = async (slug: string, dataUpdate: IBrand, imageFileData?: ICl
   }
 }
 
+const deleteBrand = async (slug: string) => {
+  try {
+    const deletedBrand = await Brand.findOneAndDelete({ slug })
+    if (!deletedBrand) throw new ApiError(StatusCodes.BAD_REQUEST, `Cannot delete brand with slug = ${slug}.`)
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: `Deleted brand with slug = ${slug} is successfully.`,
+      data: deletedBrand
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const brandService = {
   createBrand,
   getBrandBySlug,
   getBrands,
-  updateBrand
+  updateBrand,
+  deleteBrand
 }
 
 export default brandService

@@ -19,5 +19,6 @@ router.put(
   [verifyToken, isAdmin, upload.single('image'), brandValidation.updateBrand],
   brandController.updateBrand
 )
+router.delete('/:slug', [verifyToken, isAdmin], brandController.deleteBrand)
 
 export default router
