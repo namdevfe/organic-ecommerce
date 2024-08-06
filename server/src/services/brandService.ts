@@ -150,8 +150,10 @@ const updateBrand = async (slug: string, dataUpdate: IBrand, imageFileData?: ICl
 
 const deleteBrand = async (slug: string) => {
   try {
+    // Find brand in db
     const deletedBrand = await Brand.findOneAndDelete({ slug })
     if (!deletedBrand) throw new ApiError(StatusCodes.BAD_REQUEST, `Cannot delete brand with slug = ${slug}.`)
+    cloudinary.uploader.destroy(deletedBrand.imageFileName as string)
     const response: IResponseReturn = {
       statusCode: StatusCodes.OK,
       message: `Deleted brand with slug = ${slug} is successfully.`,
