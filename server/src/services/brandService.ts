@@ -16,7 +16,12 @@ const createBrand = async (data: IBrand, imageFileData: ICloudinaryFile) => {
       throw new ApiError(StatusCodes.BAD_REQUEST, `Brand title = ${data.title} already exist.`)
     }
     const slug = slugify(data.title)
-    const createdBrand = await Brand.create({ ...data, slug, image: imageFileData.path })
+    const createdBrand = await Brand.create({
+      ...data,
+      slug,
+      image: imageFileData.path,
+      imageFileName: imageFileData.filename
+    })
 
     if (imageFileData && !createdBrand) {
       cloudinary.uploader.destroy(imageFileData.filename)

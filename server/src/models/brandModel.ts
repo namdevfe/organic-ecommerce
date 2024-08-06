@@ -19,6 +19,9 @@ const brandSchema = new mongoose.Schema<IBrand, BrandModel>(
     },
     image: {
       type: String
+    },
+    imageFileName: {
+      type: String
     }
   },
   {
