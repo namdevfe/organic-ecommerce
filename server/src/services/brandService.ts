@@ -125,10 +125,13 @@ const updateBrand = async (slug: string, dataUpdate: IBrand, imageFileData?: ICl
       throw new ApiError(StatusCodes.NOT_FOUND, 'Not found.')
     }
 
+    // Remove old image before
+    cloudinary.uploader.destroy(alreadyBrand?.imageFileName as string)
+
     const newSlug = dataUpdate.title ? slugify(dataUpdate.title) : undefined
     const updatedBrand = await Brand.findOneAndUpdate(
       { slug },
-      { ...dataUpdate, slug: newSlug, image: imageFileData?.path },
+      { ...dataUpdate, slug: newSlug, image: imageFileData?.path, imageFileName: imageFileData?.filename },
       { new: true }
     )
 
