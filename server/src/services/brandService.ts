@@ -111,10 +111,40 @@ const getBrands = async (query?: any) => {
   }
 }
 
+const updateBrand = async (slug: string, dataUpdate: IBrand, imageFileData?: ICloudinaryFile) => {
+  try {
+    // Check brand already exist
+    const alreadyBrand = await Brand.findOne({ slug })
+    if (!alreadyBrand && imageFileData) {
+      cloudinary.uploader.destroy(imageFileData.filename)
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Not found.')
+    }
+
+    const newSlug = dataUpdate.title ? slugify(dataUpdate.title) : undefined
+    const updatedBrand = await Brand.findOneAndUpdate(
+      { slug },
+      { ...dataUpdate, slug: newSlug, image: imageFileData?.path },
+      { new: true }
+    )
+
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Updated brand is successfully.',
+      data: updatedBrand
+    }
+
+    return response
+  } catch (error) {
+    if (imageFileData) cloudinary.uploader.destroy(imageFileData.filename)
+    throw error
+  }
+}
+
 const brandService = {
   createBrand,
   getBrandBySlug,
-  getBrands
+  getBrands,
+  updateBrand
 }
 
 export default brandService

@@ -32,10 +32,22 @@ const getBrands = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const updateBrand = async (req: Request, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  try {
+    const imageFileData = req.file
+    const updatedBrand = await brandService.updateBrand(slug, req.body, imageFileData)
+    return res.json(updatedBrand)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const brandController = {
   creatBrand,
   getBrandBySlug,
-  getBrands
+  getBrands,
+  updateBrand
 }
 
 export default brandController
