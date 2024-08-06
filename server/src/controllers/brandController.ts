@@ -43,11 +43,22 @@ const updateBrand = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const deleteBrand = async (req: Request, res: Response, next: NextFunction) => {
+  const { slug } = req.params
+  try {
+    const deletedBrand = await brandService.deleteBrand(slug)
+    return res.json(deletedBrand)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const brandController = {
   creatBrand,
   getBrandBySlug,
   getBrands,
-  updateBrand
+  updateBrand,
+  deleteBrand
 }
 
 export default brandController
