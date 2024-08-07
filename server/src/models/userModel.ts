@@ -1,6 +1,7 @@
 import mongoose, { InferSchemaType } from 'mongoose'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
+import { PRODUCT_COLLECTION_NAME } from '~/models/productModel'
 
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
@@ -31,14 +32,16 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
-    cart: {
-      type: Array,
-      default: []
-    },
+    cart: [
+      {
+        product: { type: mongoose.Types.ObjectId, ref: PRODUCT_COLLECTION_NAME },
+        buyQuantity: { type: Number }
+      }
+    ],
     address: {
       type: String
     },
-    wishList: [{ type: mongoose.Types.ObjectId, ref: 'Product' }],
+    wishList: [{ type: mongoose.Types.ObjectId, ref: PRODUCT_COLLECTION_NAME }],
     isActived: {
       type: Boolean,
       default: true
