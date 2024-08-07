@@ -7,7 +7,8 @@ import { ACCESS_TOKEN_EXPIRES_TIME, REFRESH_TOKEN_EXPIRES_TIME } from '~/constan
 import { RESET_PASSWORD_TOKEN_EXPIRES_TIME } from '~/constants/token'
 import { generateToken } from '~/middlewares/jwtMiddleware'
 import User from '~/models/userModel'
-import { ILoginBody, ILogoutBody, IRegisterBody, IResetPasswordBody } from '~/types/auth'
+import { ILoginBody, ILogoutBody, IRegisterBody, IResetPasswordBody, IUpdateProfile } from '~/types/auth'
+import { IResponseReturn } from '~/types/common'
 import ApiError from '~/utils/ApiError'
 import sendMail from '~/utils/sendMail'
 
@@ -177,10 +178,16 @@ const getProfile = async (uid: string) => {
   }
 }
 
-const updateProfile = async (uid: string, data: any) => {
+const updateProfile = async (uid: string, data: IUpdateProfile) => {
   try {
-    const userUpdated = await User.findByIdAndUpdate({ _id: uid }, { ...data }, { new: true })
-    return userUpdated
+    await User.findByIdAndUpdate({ _id: uid }, { ...data }, { new: true })
+
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Updated profile is successfully.'
+    }
+
+    return response
   } catch (error) {
     throw error
   }
