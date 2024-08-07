@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { ICoupon, IUpdateCoupon } from '~/types/coupon'
+import { DeleteCouponType, ICoupon, IUpdateCoupon } from '~/types/coupon'
 import ApiError from '~/utils/ApiError'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/constants/validators'
 
@@ -48,9 +48,23 @@ const updateCoupon = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+const deleteCoupon = async (req: Request, res: Response, next: NextFunction) => {
+  const correctCondition = Joi.object<DeleteCouponType>({
+    couponId: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+  })
+
+  try {
+    await correctCondition.validateAsync({ couponId: req.params.couponId }, { abortEarly: false })
+    next()
+  } catch (error) {
+    if (error instanceof Error) next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message))
+  }
+}
+
 const couponValidation = {
   createCoupon,
-  updateCoupon
+  updateCoupon,
+  deleteCoupon
 }
 
 export default couponValidation

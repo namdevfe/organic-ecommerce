@@ -81,11 +81,26 @@ const updateCoupon = async (couponId: string, data: { name: string; expiredTime:
   }
 }
 
+const deleteCoupon = async (couponId: string) => {
+  try {
+    const deletedCoupon = await Coupon.findByIdAndDelete(couponId)
+    if (!deletedCoupon) throw new ApiError(StatusCodes.BAD_REQUEST, `Cannot delete coupon with id = ${couponId}.`)
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: `Deleted coupon with id = ${couponId} is successfully.`
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const couponService = {
   createCoupon,
   getCoupon,
   getCoupons,
-  updateCoupon
+  updateCoupon,
+  deleteCoupon
 }
 
 export default couponService
