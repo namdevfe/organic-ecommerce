@@ -128,6 +128,7 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
     firstName: Joi.string().trim().strict(),
     lastName: Joi.string().trim().strict(),
     address: Joi.string().trim().strict(),
+    username: Joi.string().trim().strict(),
     avatar: Joi.string().trim().strict()
   })
 

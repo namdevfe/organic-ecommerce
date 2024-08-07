@@ -78,7 +78,7 @@ const updateProfile = async (req: AuthRequestCustom, res: Response, next: NextFu
   const { uid } = req.user as IJWTPayload
   try {
     const userUpdated = await authService.updateProfile(uid, req.body)
-    return res.json({ userUpdated })
+    return res.json(userUpdated)
   } catch (error) {
     next(error)
   }
