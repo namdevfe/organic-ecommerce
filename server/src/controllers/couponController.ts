@@ -29,10 +29,21 @@ const getCoupons = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const updateCoupon = async (req: Request, res: Response, next: NextFunction) => {
+  const { couponId } = req.params
+  try {
+    const updatedCoupon = await couponService.updateCoupon(couponId, req.body)
+    return res.json(updatedCoupon)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const couponController = {
   createCoupon,
   getCoupon,
-  getCoupons
+  getCoupons,
+  updateCoupon
 }
 
 export default couponController

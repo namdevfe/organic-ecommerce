@@ -9,5 +9,6 @@ const router: Router = express.Router()
 router.get('/', [verifyToken, isAdmin], couponController.getCoupons)
 router.get('/:name', couponController.getCoupon)
 router.post('/', [verifyToken, isAdmin, couponValidation.createCoupon], couponController.createCoupon)
+router.put('/:couponId', [verifyToken, isAdmin, couponValidation.updateCoupon], couponController.updateCoupon)
 
 export default router

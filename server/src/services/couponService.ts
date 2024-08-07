@@ -58,10 +58,34 @@ const getCoupons = async () => {
   }
 }
 
+const updateCoupon = async (couponId: string, data: { name: string; expiredTime: number; discount: number }) => {
+  const { name, discount, expiredTime } = data
+  try {
+    const alreadyCoupon = await Coupon.findById(couponId)
+    if (!alreadyCoupon) throw new ApiError(StatusCodes.BAD_REQUEST, `Cannot update coupon with id = ${couponId}`)
+    const nameUppercase = name?.toUpperCase()
+    const newExpiredTime = Date.now() + Number(expiredTime * 24 * 60 * 60 * 1000)
+    const updatedCoupon = await Coupon.findByIdAndUpdate(
+      couponId,
+      { name: nameUppercase, discount, expiredTime: newExpiredTime },
+      { new: true }
+    )
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: `Updated coupon with id = ${couponId} is successfully.`,
+      data: updatedCoupon
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const couponService = {
   createCoupon,
   getCoupon,
-  getCoupons
+  getCoupons,
+  updateCoupon
 }
 
 export default couponService
