@@ -39,11 +39,22 @@ const updateCoupon = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+const deleteCoupon = async (req: Request, res: Response, next: NextFunction) => {
+  const { couponId } = req.params
+  try {
+    const deletedCoupon = await couponService.deleteCoupon(couponId)
+    return res.json(deletedCoupon)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const couponController = {
   createCoupon,
   getCoupon,
   getCoupons,
-  updateCoupon
+  updateCoupon,
+  deleteCoupon
 }
 
 export default couponController

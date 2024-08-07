@@ -9,3 +9,5 @@ export interface ICoupon {
 export interface IUpdateCoupon extends ICoupon {
   couponId: mongoose.Types.ObjectId
 }
+
+export type DeleteCouponType = Pick<IUpdateCoupon, 'couponId'>
