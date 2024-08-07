@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import { PRODUCT_COLLECTION_NAME } from '~/models/productModel'
 
+export const USER_COLLECTION_NAME = 'User'
+
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
   {
@@ -92,7 +94,7 @@ userSchema.methods = {
 }
 
 //Export the model
-const User = mongoose.model<IUser>('User', userSchema)
+const User = mongoose.model<IUser>(USER_COLLECTION_NAME, userSchema)
 
 interface IUser extends InferSchemaType<typeof userSchema> {
   // eslint-disable-next-line no-unused-vars
