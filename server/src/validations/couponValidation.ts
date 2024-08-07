@@ -12,6 +12,9 @@ const createCoupon = async (req: Request, res: Response, next: NextFunction) => 
     }),
     expiredTime: Joi.number().required().messages({
       'any.required': 'Expired Time is required'
+    }),
+    discount: Joi.number().required().messages({
+      'any.required': 'Discount is required'
     })
   })
 
