@@ -8,7 +8,8 @@ export const COUPON_COLLECTION_NAME = 'Coupon'
 const couponSchema = new mongoose.Schema<ICoupon, CouponModel>(
   {
     name: { type: String, required: true, unique: true },
-    expiredTime: { type: Date, required: true }
+    expiredTime: { type: Date, required: true },
+    discount: { type: Number, required: true }
   },
   {
     timestamps: true

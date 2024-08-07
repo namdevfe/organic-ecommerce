@@ -4,8 +4,8 @@ import Coupon from '~/models/couponModel'
 import { IResponseReturn } from '~/types/common'
 import ApiError from '~/utils/ApiError'
 
-const createCoupon = async (data: { name: string; expiredTime: number }) => {
-  const { name, expiredTime } = data || {}
+const createCoupon = async (data: { name: string; expiredTime: number; discount: number }) => {
+  const { name, expiredTime, discount } = data || {}
   try {
     const coupon = await Coupon.findOne({ name })
     if (coupon) throw new ApiError(StatusCodes.BAD_REQUEST, `Coupon name = ${name} had already exist.`)
@@ -15,7 +15,7 @@ const createCoupon = async (data: { name: string; expiredTime: number }) => {
     // Calculate expired time
     const expiredTimeModify = Date.now() + Number(expiredTime * 24 * 60 * 60 * 1000)
 
-    const createdCoupon = await Coupon.create({ name: uppercaseCouponName, expiredTime: expiredTimeModify })
+    const createdCoupon = await Coupon.create({ name: uppercaseCouponName, expiredTime: expiredTimeModify, discount })
 
     const response: IResponseReturn = {
       statusCode: StatusCodes.CREATED,
