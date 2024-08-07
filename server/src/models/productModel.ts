@@ -3,6 +3,8 @@ import { IProduct } from '~/types/product'
 
 type ProductModel = Model<IProduct>
 
+export const PRODUCT_COLLECTION_NAME = 'Product'
+
 const productSchema = new mongoose.Schema<IProduct, ProductModel>(
   {
     title: { type: String, required: true, unique: true },
@@ -28,6 +30,6 @@ const productSchema = new mongoose.Schema<IProduct, ProductModel>(
   }
 )
 
-const Product: ProductModel = model<IProduct, ProductModel>('Product', productSchema)
+const Product: ProductModel = model<IProduct, ProductModel>(PRODUCT_COLLECTION_NAME, productSchema)
 
 export default Product
