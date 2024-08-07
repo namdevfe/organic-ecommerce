@@ -44,9 +44,24 @@ const getCoupon = async (name: string) => {
   }
 }
 
+const getCoupons = async () => {
+  try {
+    const coupons = await Coupon.find()
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get list coupons is successfully.',
+      data: coupons
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const couponService = {
   createCoupon,
-  getCoupon
+  getCoupon,
+  getCoupons
 }
 
 export default couponService
