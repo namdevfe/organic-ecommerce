@@ -10,8 +10,19 @@ const createCoupon = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+const getCoupon = async (req: Request, res: Response, next: NextFunction) => {
+  const { name } = req.params
+  try {
+    const coupon = await couponService.getCoupon(name)
+    return res.json(coupon)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const couponController = {
-  createCoupon
+  createCoupon,
+  getCoupon
 }
 
 export default couponController

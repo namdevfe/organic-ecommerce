@@ -29,8 +29,24 @@ const createCoupon = async (data: { name: string; expiredTime: number }) => {
   }
 }
 
+const getCoupon = async (name: string) => {
+  try {
+    const coupon = await Coupon.findOne({ name: name.toUpperCase() })
+    if (!coupon) throw new ApiError(StatusCodes.NOT_FOUND, `Coupon name = ${name} not found.`)
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get coupon details is successfully.',
+      data: coupon
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const couponService = {
-  createCoupon
+  createCoupon,
+  getCoupon
 }
 
 export default couponService
