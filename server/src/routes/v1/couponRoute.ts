@@ -6,7 +6,8 @@ import couponValidation from '~/validations/couponValidation'
 
 const router: Router = express.Router()
 
-router.post('/', [verifyToken, isAdmin, couponValidation.createCoupon], couponController.createCoupon)
+router.get('/', [verifyToken, isAdmin], couponController.getCoupons)
 router.get('/:name', couponController.getCoupon)
+router.post('/', [verifyToken, isAdmin, couponValidation.createCoupon], couponController.createCoupon)
 
 export default router

@@ -20,9 +20,19 @@ const getCoupon = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getCoupons = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const coupons = await couponService.getCoupons()
+    return res.json(coupons)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const couponController = {
   createCoupon,
-  getCoupon
+  getCoupon,
+  getCoupons
 }
 
 export default couponController
