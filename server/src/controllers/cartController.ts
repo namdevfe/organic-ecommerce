@@ -13,8 +13,20 @@ const addToCart = async (req: AuthRequestCustom, res: Response, next: NextFuncti
   }
 }
 
+// Get cart details
+const getCart = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const { uid } = req.user as IJWTPayload
+  try {
+    const cart = await cartService.getCart(uid)
+    return res.json(cart)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const cartController = {
-  addToCart
+  addToCart,
+  getCart
 }
 
 export default cartController

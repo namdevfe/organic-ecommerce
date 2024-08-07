@@ -45,8 +45,24 @@ const addToCart = async (uid: string, data: IAddToCart) => {
   }
 }
 
+// Get cart details
+const getCart = async (uid: string) => {
+  try {
+    const cart = await User.findById(uid).select('cart')
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get cart is successfully.',
+      data: cart
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const cartService = {
-  addToCart
+  addToCart,
+  getCart
 }
 
 export default cartService
