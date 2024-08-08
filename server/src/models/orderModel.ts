@@ -1,15 +1,8 @@
 import mongoose, { Model } from 'mongoose'
+import { COUPON_COLLECTION_NAME } from '~/models/couponModel'
 import { PRODUCT_COLLECTION_NAME } from '~/models/productModel'
 import { USER_COLLECTION_NAME } from '~/models/userModel'
-import { IAddToCart } from '~/types/cart'
-
-interface IOrder {
-  products: IAddToCart[]
-  totalPrice: number
-  orderBy: mongoose.Schema.Types.ObjectId | string
-  coupon: mongoose.Schema.Types.ObjectId | string
-  status: string
-}
+import { IOrder } from '~/types/order'
 
 type OrderModel = Model<IOrder>
 
@@ -24,7 +17,7 @@ const orderSchema = new mongoose.Schema<IOrder, OrderModel>({
   ],
   totalPrice: { type: Number, default: 0 },
   orderBy: { type: mongoose.Types.ObjectId, ref: USER_COLLECTION_NAME },
-  coupon: { type: mongoose.Types.ObjectId, ref: 'Coupon' },
+  coupon: { type: mongoose.Types.ObjectId, ref: COUPON_COLLECTION_NAME },
   status: {
     type: String,
     enum: ['Cancelled', 'Processing', 'Succeed'],
