@@ -33,7 +33,7 @@ const createOrder = async (uid: string, coupon?: string) => {
       }
     }
 
-    const createdOrder = await Order.create({ products, totalPrice, orderBy: uid })
+    const createdOrder = await Order.create({ products, totalPrice, orderBy: uid, coupon })
 
     // Delete cart if order success
     createdOrder && (await User.findByIdAndUpdate(uid, { cart: [] }, { new: true }))
