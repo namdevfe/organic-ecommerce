@@ -68,9 +68,28 @@ const updateOrderStatus = async (orderId: string, status: ORDER_STATUS) => {
   }
 }
 
+const getOrderDetails = async (orderId: string) => {
+  try {
+    const orderDetails = await Order.findById(orderId)
+
+    if (!orderDetails) throw new ApiError(StatusCodes.NOT_FOUND, `Order id = ${orderId} not found.`)
+
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get order details is successfully.',
+      data: orderDetails
+    }
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const orderService = {
   createOrder,
-  updateOrderStatus
+  updateOrderStatus,
+  getOrderDetails
 }
 
 export default orderService
