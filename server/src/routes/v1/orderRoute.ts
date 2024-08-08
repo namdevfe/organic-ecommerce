@@ -7,6 +7,7 @@ import orderValidation from '~/validations/orderValidation'
 const router: Router = express.Router()
 
 router.post('/', [verifyToken, orderValidation.createOrder], orderController.createOrder)
+router.get('/:orderId', verifyToken, orderController.getOrderDetails)
 router.put(
   '/:orderId/status',
   [verifyToken, isAdmin, orderValidation.updateOrderStatus],
