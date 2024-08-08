@@ -13,8 +13,20 @@ const createOrder = async (req: AuthRequestCustom, res: Response, next: NextFunc
   }
 }
 
+const updateOrderStatus = async (req: AuthRequestCustom, res: Response, next: NextFunction) => {
+  const { orderId } = req.params
+  const { status } = req.body
+  try {
+    const updatedOrder = await orderService.updateOrderStatus(orderId, status)
+    return res.json(updatedOrder)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const orderController = {
-  createOrder
+  createOrder,
+  updateOrderStatus
 }
 
 export default orderController
