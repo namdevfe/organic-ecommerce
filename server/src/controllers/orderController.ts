@@ -34,10 +34,20 @@ const getOrderDetails = async (req: Request, res: Response, next: NextFunction) 
   }
 }
 
+const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orders = await orderService.getOrders()
+    return res.json(orders)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const orderController = {
   createOrder,
   updateOrderStatus,
-  getOrderDetails
+  getOrderDetails,
+  getOrders
 }
 
 export default orderController

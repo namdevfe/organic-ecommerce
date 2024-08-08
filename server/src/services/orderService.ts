@@ -86,10 +86,25 @@ const getOrderDetails = async (orderId: string) => {
   }
 }
 
+const getOrders = async () => {
+  try {
+    const orders = await Order.find()
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: 'Get orders is successfully.',
+      data: orders
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const orderService = {
   createOrder,
   updateOrderStatus,
-  getOrderDetails
+  getOrderDetails,
+  getOrders
 }
 
 export default orderService
