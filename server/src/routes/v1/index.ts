@@ -9,6 +9,7 @@ import blogRoutes from '~/routes/v1/blogRoute'
 import brandRoutes from '~/routes/v1/brandRoute'
 import cartRoutes from '~/routes/v1/cartRoute'
 import couponRoutes from '~/routes/v1/couponRoute'
+import orderRoutes from '~/routes/v1/orderRoute'
 
 const initRoutes = (app: Application) => {
   app.use(`${BASE_URL_API_V1}/auth`, authRoutes)
@@ -19,6 +20,7 @@ const initRoutes = (app: Application) => {
   app.use(`${BASE_URL_API_V1}/brands`, brandRoutes)
   app.use(`${BASE_URL_API_V1}/carts`, cartRoutes)
   app.use(`${BASE_URL_API_V1}/coupons`, couponRoutes)
+  app.use(`${BASE_URL_API_V1}/orders`, orderRoutes)
 
   app.use(notFoundErrorMiddleware)
   app.use(errorHandlerMiddleware)
