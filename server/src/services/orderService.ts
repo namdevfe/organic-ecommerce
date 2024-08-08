@@ -5,6 +5,7 @@ import Coupon from '~/models/couponModel'
 import Order from '~/models/orderModel'
 import User from '~/models/userModel'
 import { IResponseReturn } from '~/types/common'
+import { ORDER_STATUS } from '~/types/order'
 import ApiError from '~/utils/ApiError'
 
 const createOrder = async (uid: string, coupon?: string) => {
@@ -49,8 +50,27 @@ const createOrder = async (uid: string, coupon?: string) => {
   }
 }
 
+const updateOrderStatus = async (orderId: string, status: ORDER_STATUS) => {
+  try {
+    const order = await Order.findById(orderId)
+    if (!order) throw new ApiError(StatusCodes.NOT_FOUND, `Order id = ${orderId} not found.`)
+
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, { status }, { new: true })
+
+    const response: IResponseReturn = {
+      statusCode: StatusCodes.OK,
+      message: `Updaed status order id = ${orderId} is successfully.`,
+      data: updatedOrder
+    }
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
 const orderService = {
-  createOrder
+  createOrder,
+  updateOrderStatus
 }
 
 export default orderService
