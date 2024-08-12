@@ -1,9 +1,7 @@
-import './styles/App.css'
+import MainLayout from '~/layouts/MainLayout'
 
 const App = () => {
-  return (
-    <h1 className='text-3xl font-bold underline'>Organic Ecommerce Website</h1>
-  )
+  return <MainLayout />
 }
 
 export default App

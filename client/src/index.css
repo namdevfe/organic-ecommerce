@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply w-full max-w-[2560px] bg-white my-0 mx-auto font-poppins font-normal text-sm tracking-normal;
+  }
+}
+
+@layer utilities {
+  .l-container {
+    @apply max-w-[1352px] ml-auto mr-auto pl-4 pr-4;
+  }
+}
