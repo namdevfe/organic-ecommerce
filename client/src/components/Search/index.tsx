@@ -1,6 +1,9 @@
 const Search = () => {
   return (
-    <div className='hidden max-w-[380px] lg:max-w-[498px] h-[45px] md:flex items-center border border-gray-100 rounded-md overflow-hidden'>
+    <div
+      className='hidden max-w-[380px] lg:max-w-[498px] h-[45px] md:flex items-center border
+        border-gray-100 rounded-md overflow-hidden'
+    >
       {/* Input */}
       <div className='w-[400px] h-full relative'>
         <input
@@ -11,7 +14,7 @@ const Search = () => {
         <img
           src='/images/icon-search.svg'
           alt='icon-search'
-          className=' absolute top-2/4 left-4 -translate-y-2/4'
+          className='absolute top-2/4 left-4 -translate-y-2/4'
         />
       </div>
 
