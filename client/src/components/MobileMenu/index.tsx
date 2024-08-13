@@ -1,9 +1,21 @@
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import useViewportWidth from '~/hooks/useViewportWidth'
 import { RootState } from '~/store'
+import { handleCloseMobileMenu } from '~/store/reducers/appReducer'
 import { cn } from '~/utils/functions'
 
 const MobileMenu = () => {
+  const width = useViewportWidth()
   const isShowMobileMenu = useSelector((state: RootState) => state.app.isShowMobileMenu)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (width >= 768) {
+      dispatch(handleCloseMobileMenu())
+    }
+  }, [width])
 
   return (
     <div
