@@ -5,12 +5,12 @@
 
 @layer base {
   body {
-    @apply w-full max-w-[2560px] bg-white my-0 mx-auto font-poppins font-normal text-sm tracking-normal;
+    @apply mx-auto my-0 w-full max-w-[2560px] bg-white font-poppins text-sm font-normal tracking-normal text-gray-400;
   }
 }
 
 @layer utilities {
   .l-container {
-    @apply max-w-[1352px] ml-auto mr-auto pl-4 pr-4;
+    @apply ml-auto mr-auto max-w-[1352px] pl-4 pr-4;
   }
 }
