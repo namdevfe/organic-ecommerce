@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { USER_ROUTES } from '~/constants/routes'
 import { cn } from '~/utils/functions'
 
 type LogoProps = {
@@ -6,7 +8,7 @@ type LogoProps = {
 
 const Logo = ({ classNames = '' }: LogoProps) => {
   return (
-    <a href='/' className='flex items-center gap-2'>
+    <Link to={USER_ROUTES.HOME} className='flex items-center gap-2'>
       <img src='/images/icon-plant.svg' alt='icon-plant' />
       <span
         className={cn(
@@ -16,7 +18,7 @@ const Logo = ({ classNames = '' }: LogoProps) => {
       >
         NamShop
       </span>
-    </a>
+    </Link>
   )
 }
 

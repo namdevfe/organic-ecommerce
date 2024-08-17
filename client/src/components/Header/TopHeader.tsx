@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom'
 import Divider from '~/components/Divider'
+import { USER_ROUTES } from '~/constants/routes'
 
 const TopHeader = () => {
   return (
@@ -7,7 +9,9 @@ const TopHeader = () => {
         {/* Left */}
         <div className='hidden md:flex items-center gap-2'>
           <img src='/images/icon-location.svg' alt='icon-location' />
-          <span className='text-xs text-gray-600'>Store Location: Lincoln- 344, Illinois, Chicago, USA</span>
+          <span className='text-xs text-gray-600'>
+            Store Location: Lincoln- 344, Illinois, Chicago, USA
+          </span>
         </div>
 
         {/* Right */}
@@ -30,10 +34,23 @@ const TopHeader = () => {
 
           {/* Authentication */}
           <div className='flex items-center gap-[14px] text-xs text-gray-600 capitalize'>
-            {/*  */}
-            <div className='cursor-pointer transition-colors duration-300 hover:text-primary-200'>Sign In</div>
+            {/* Login */}
+            <Link
+              to={USER_ROUTES.LOGIN}
+              className='cursor-pointer transition-colors duration-300 hover:text-primary-200'
+            >
+              Sign In
+            </Link>
+
             <Divider className='w-[1px] h-[15px] bg-gray-600 rotate-12' />
-            <div className='cursor-pointer transition-colors duration-300 hover:text-primary-200'>Sign Up</div>
+
+            {/* Register */}
+            <Link
+              to={USER_ROUTES.REGISTER}
+              className='cursor-pointer transition-colors duration-300 hover:text-primary-200'
+            >
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
