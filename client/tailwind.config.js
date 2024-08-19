@@ -23,7 +23,11 @@ export default {
           300: '#2C742F'
         },
         warning: '#FF8A00',
-        danger: '#EA4B48'
+        danger: '#EA4B48',
+        ghost: {
+          DEFAULT: '#D2DAD2',
+          hover: '#BBC9BB'
+        }
       },
       height: {
         'top-header': '42px',
