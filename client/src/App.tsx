@@ -9,21 +9,19 @@ import RegisterPage from '~/pages/user/RegisterPage'
 
 const App = () => {
   return (
-    <>
-      <Routes>
-        {/* Public Routes */}
-        <Route path={USER_ROUTES.HOME} element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path={USER_ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={USER_ROUTES.REGISTER} element={<RegisterPage />} />
-        </Route>
+    <Routes>
+      {/* Public Routes */}
+      <Route path={USER_ROUTES.HOME} element={<MainLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path={USER_ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={USER_ROUTES.REGISTER} element={<RegisterPage />} />
+      </Route>
 
-        {/* Private Routes */}
-        <Route path={ADMIN_ROUTES.DASHBOARD} element={<AdminLayout />}>
-          <Route index element={<DashboardPage />} />
-        </Route>
-      </Routes>
-    </>
+      {/* Private Routes */}
+      <Route path={ADMIN_ROUTES.DASHBOARD} element={<AdminLayout />}>
+        <Route index element={<DashboardPage />} />
+      </Route>
+    </Routes>
   )
 }
 
