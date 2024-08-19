@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { cn } from '~/utils/functions'
 
 const buttonVariants = cva(
-  'min-w-fit rounded-[43px] text-white font-semibold transition-all duration-300 flex items-center justify-center',
+  'min-w-fit rounded-[43px] text-white font-semibold transition-all duration-300 flex items-center justify-center capitalize',
   {
     variants: {
       variant: {
@@ -12,7 +12,8 @@ const buttonVariants = cva(
         outlined:
           'bg-white border-2 border-primary-200 text-primary-200 hover:border-primary-300 hover:text-primary-300',
         ghost:
-          'bg-ghost text-primary-200 hover:bg-ghost-hover hover:text-primary-300'
+          'bg-ghost text-primary-200 hover:bg-ghost-hover hover:text-primary-300',
+        link: 'bg-transparent text-primary-200'
       },
       size: {
         sm: 'h-9 text-xs px-6',
